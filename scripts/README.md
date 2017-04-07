@@ -14,7 +14,7 @@ For the s288c pacbio case, the read depth sample is required as additional input
 example: ./canu.sh /full/path/to/canu s288c pacbio 31X
 
 
-#### Nanopolish #
+### Nanopolish #
 
 script: nanopolish.sh
 
@@ -30,7 +30,7 @@ that can be launched directly on the local machine, although we suggest to run i
 
 
 
-# Scripts for Miseq assembly + long reads scaffolding pipelines #
+### Scripts for Miseq assembly + long reads scaffolding pipelines #
 
 spades.sh: launch first to create a miseq only assembly
 smis.sh, npscarf.sh, hybridspades.sh for scaffolding
@@ -44,7 +44,7 @@ Warning: please notice that the statistic information collected in the paper
 	This is especially affecting assemblies based on illumina data.
 
 
-# Scripts for generating a ont-emu PacBio sample #
+### Scripts for generating a ont-emu PacBio sample #
 
 ontemu_sub.sh
 
