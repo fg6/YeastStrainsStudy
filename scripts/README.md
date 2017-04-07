@@ -1,5 +1,5 @@
-These are general info, for details launch each script with option "-h"
-
+These are general info, for details launch each script with option "-h".
+The results of the pipeline will be in this folder under "results".
 
 
 ### Scripts for long-reads only assembly pipelines #
@@ -45,7 +45,7 @@ npscarf.sh also needs the location of bwa.
 Please notice that in the paper the scaffolding pipelines have been run only for ONT data or PacBio s288c 31X depth data.
 It is possible to run whole PacBio data samples but it will take long.
 
-	example:  npscarf.sh <npscarf> <strain> <platform> <bwa>
+	example:  npscarf.sh /full/path/to/npscarf/ s288c ont /full/path/to/bwa
 
 Warning: please notice that the statistic information collected in the paper
 	are for assemblies after contigs smaller than 1000 bp have been eliminated.
