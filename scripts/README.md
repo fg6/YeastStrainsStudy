@@ -11,7 +11,7 @@ the strain to be assembled (s288c,sk1,cbs,n44), the platform of data (ont, pacbi
 Some assembler (miniasm,racon) needs additional inputs (launch single script with "-h" option for details)
 For the s288c pacbio case, the read depth sample is required as additional input: 31X (ont-emu subsample) or allX (whole sample)
 
-example: ./canu.sh /full/path/to/canu s288c pacbio 31X
+	example: ./canu.sh /full/path/to/canu s288c pacbio 31X
 
 
 ### Nanopolish #
@@ -31,13 +31,21 @@ that can be launched directly on the local machine, although we suggest to run i
 
 
 ### Scripts for Miseq assembly + long reads scaffolding pipelines #
-
 spades.sh: launch first to create a miseq only assembly
 smis.sh, npscarf.sh, hybridspades.sh for scaffolding
 
-...
+First launch spades.sh giving as input the location of spades.py and the strain you are insterested in:
+	
+	 example: ./spades.sh /full/path/to/spades.py s288c  
 
-example:
+Then, smis.sh, npscarf.sh, hybridspades.sh need as input the location of the pipeline executable (full path), 
+the strain to be assembled (s288c,sk1,cbs,n44), the platform of data (ont, pacbio).
+npscarf.sh also needs the location of bwa. 
+
+Please notice that in the paper the scaffolding pipelines have been run only for ONT data or PacBio s288c 31X depth data.
+It is possible to run whole PacBio data samples but it will take long.
+
+	example:  npscarf.sh <npscarf> <strain> <platform> <bwa>
 
 Warning: please notice that the statistic information collected in the paper
 	are for assemblies after contigs smaller than 1000 bp have been eliminated.
@@ -57,7 +65,7 @@ Please notice that as a random selection is involved in the subsampling, the fin
   ont-emu sample used in the original analysis (in pacbio_fastq/s288c_pacbio_ontemu_31X.fastq),
   but it will have similar distribution shape and read depth.
 
-example: ./ontemu_sub.sh
+	example: ./ontemu_sub.sh
 
 
 
