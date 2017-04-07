@@ -2,7 +2,7 @@ These are general info, for details launch each script with option "-h"
 
 
 
-# Scripts for long-reads only assembly pipelines #
+### Scripts for long-reads only assembly pipelines #
 
 scripts: abruijn.sh  canu.sh  falcon.sh miniasm.sh  pbcr_miseq.sh  pbcr.sh  racon.sh  smartdenovo.sh
 
@@ -14,7 +14,7 @@ For the s288c pacbio case, the read depth sample is required as additional input
 example: ./canu.sh /full/path/to/canu s288c pacbio 31X
 
 
-# Nanopolish #
+#### Nanopolish #
 
 script: nanopolish.sh
 
