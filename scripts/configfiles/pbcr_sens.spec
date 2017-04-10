@@ -24,13 +24,6 @@ frgCorrBatchSize = 100000
 ovlCorrBatchSize = 100000
 
 
-sgeScript = -pe threads 1
-sgeConsensus = -pe threads 8
-sgeOverlap = -pe threads 10 –l mem=2GB
-sgeCorrection = -pe threads 10 –l mem=2GB
-sgeFragmentCorrection = -pe threads 10 –l mem=2GB
-sgeOverlapCorrection = -pe threads 1 –l mem=16GB
-
 # from pbcr_oxford: adjust assembly parameters to overlap at high error rate since the corrected reads are not 99% like pacbio
 # lower QV of corrected sequences from 99+ to 97-98
 QV=52
