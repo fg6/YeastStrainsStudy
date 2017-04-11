@@ -33,5 +33,5 @@ example:
 	cd scripts	
 	./canu.sh <canu_location> <strain> <platform> <cov>
 
-For details look at scripts/README.md or launch each script with option "-h"
+For details on the pipelines look at scripts/README.md or launch each script with option "-h"
 
