@@ -18,6 +18,14 @@ example:
 		$  ./launchme.sh s288c
 
 Please note that downloading data and preparing the fastq files is very time consuming. 
+Max disk space required during data preparation:
+
+s288c:
+sk1:
+n44:
+cbs:
+Final disk occupied smaller as intermediate files are deleted. 
+Total final disk space required: < 30GB.
 
 #### Requirements:
 To install 'poretools' a python version >= 2.7 is needed. Please 
