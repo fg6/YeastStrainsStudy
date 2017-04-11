@@ -2,7 +2,9 @@
 set -o errexit
 set -o pipefail
 
-source ./runlist.sh
+thisdir=`pwd`
+
+source $thisdir/runlist.sh
 singlestrain=$1
 
 
@@ -25,7 +27,6 @@ function validate_url(){
   if [[ `wget -S --spider $1  2>&1  | grep exists` ]]; then echo "true"; else echo "false"; fi
 }
 
-thisdir=`pwd`
 
 ##########################################
 ####### download some utilities ##########
@@ -55,7 +56,7 @@ if [ ! -f locpy/bin/activate ]; then
     
 
     virtualenv locpy
-    source locpy/bin/activate
+    source $thisdir/src/locpy/bin/activate
     pip install --upgrade pip
     pip install --upgrade distribute
     pip install cython
@@ -67,7 +68,7 @@ if [ ! -f locpy/bin/activate ]; then
     deactivate
     
 fi
-source locpy/bin/activate
+source $thisdir/src/locpy/bin/activate
 
 if [ ! -d  $thisdir/src/poretools ] ; then
     cd $thisdir/src/
@@ -106,6 +107,7 @@ if [[ ${#strains[@]} -eq 0 ]]; then exit; fi
 ###########################################
 ########## Download data from ENA #########
 ###########################################
+cd $thisdir
 source locpy/bin/activate
 
 
@@ -186,7 +188,7 @@ for strain in "${strains[@]}"; do
     done
 done
 
-
+exit
 #******************* MiSeq ******************* #
 
 folder=$thisdir/fastqs/miseq
