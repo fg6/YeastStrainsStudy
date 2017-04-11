@@ -8,11 +8,13 @@ singlestrain=$1
 
 if [ $# -lt 1 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<strain\> 
-    echo "  strain: Download data for this strain [s288c] (s288c,sk1,cbs,n44,all)"
+    echo "  strain: Download data for this strain [s288c] (s288c,sk1,cbs,n44,all,none)"
     exit
 fi
 
-if [ $singlestrain != "all" ]; then
+if  [ $singlestrain == "none" ]; then
+    strains=( )
+elif [ $singlestrain != "all" ]; then
     strains=( $singlestrain )
 else
     strains=( s288c sk1 cbs n44 )
@@ -35,6 +37,8 @@ cd $thisdir/src
 if [ ! -f locpy/bin/activate ]; then
     pyversion=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(major);'`
     minor=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(minor);'`
+
+
     if [[ $pyversion != 2 ]] && [[ $pyversion != 3 ]]; then
         pyv=`python -c 'import platform; print(platform.python_version())'`
         echo; echo " "Warning!! This script needs python version > 2.7 ! 
@@ -49,7 +53,7 @@ if [ ! -f locpy/bin/activate ]; then
         exit 1
     fi
     
-	
+
     virtualenv locpy
     source locpy/bin/activate
     pip install --upgrade pip
@@ -57,8 +61,6 @@ if [ ! -f locpy/bin/activate ]; then
     pip install cython
     pip install numpy
     pip install pandas
-    #pip install numpy==1.10.4
-    #pip install pandas==0.18.1
     pip install panda
     pip install matplotlib
     pip install seaborn
@@ -74,8 +76,7 @@ if [ ! -d  $thisdir/src/poretools ] ; then
     git reset --hard 4e04e25f22d03345af97e3d37bd8cf2bdf457fc9   
     python setup.py install
 fi
-	    
-exit
+	
 
 if [ ! -d  $thisdir/src/fq2fa ] ; then
     ## fastq 2 fasta
@@ -91,22 +92,21 @@ if [ ! -d  $thisdir/src/random_subreads ] ; then
     git clone -b YeastStrainsStudy https://github.com/fg6/random_subreads.git
 fi
 
+echo "   ... ready!"
 
 
+if [[ ${#strains[@]} -eq 0 ]]; then exit; fi
 
 
-exit
 ###################################################
   echo; echo " Downloading and preparing data..."
 ###################################################
-
-mkdir -p $thisdir/fastqs
-cd $thisdir/fastqs
 
 
 ###########################################
 ########## Download data from ENA #########
 ###########################################
+source locpy/bin/activate
 
 
 #******************* ONT ******************* #
@@ -123,20 +123,40 @@ for strain in "${strains[@]}"; do
     thislist=ont${strain}[@]
     for tarfile  in "${!thislist}"; do
 	file=$ontftp/$tarfile
-	if [ -f $tarfile ]; then
+	fold=$(basename "$tarfile" .tar.gz)
+
+	if [ ! -f $tarfile ] && [ ! -f $fold.fastq ] ; then
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	#wget $ontftp/$tarfile
-		echo "   " $strain $file ok
+	    	wget $ontftp/$tarfile
 	    else 
 		echo "Could not find url " $file
 	    fi
+	fi
 
+	if [ ! -d $fold ] && [ ! -f $fold.fastq ] ; then
 	    tar -xvzf $tarfile
+	    echo untar
+	fi
+	    	    
+	if [ ! -f $fold.fastq ]; then
+	    echo poretools fastq --type 2D $fold  ">" $fold.fastq
+	fi ## poretools
+	    
+    done # runs
+    
+    echo all done, now merge
+    fqs=`ls *fastqs | wc -l` 
+    
+    if [ ! -z ${fqs-x} ]; then  
+	echo ok $fqs
+    else
+	echo no fastqs
+    fi
 
-	fi ## if file not downloaded yet
-    done
-done
 
+done # strain
+
+exit
 #******************* PacBio ******************* #
 
 folder=$thisdir/fastqs/pbh5
