@@ -27,7 +27,9 @@ make sure this is available in your PATH, together with virtualenv.
 
 ### Pipelines
 After 'launchme.sh', you can run the  various pipelines, from the  scripts folder
+
 example:	
+
 	cd scripts	
 	./canu.sh <canu_location> <strain> <platform> <cov>
 
