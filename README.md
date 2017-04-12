@@ -20,7 +20,7 @@ example:
 Please note that downloading data and preparing the fastq files is very time consuming. 
 Max disk space required during data preparation:
 
-s288c:
+s288c: ont ~630GB  (pacbio 26GB)
 sk1:
 n44:
 cbs:
@@ -34,12 +34,12 @@ make sure this is available in your PATH, together with virtualenv.
 
 
 ### Pipelines
-After 'launchme.sh', you can run the  various pipelines, from the  scripts folder
+After 'launchme.sh', you can run the  various pipelines, from the 'pipelines' folder
 
 example:	
 
-	cd scripts	
+	cd pipelines	
 	./canu.sh <canu_location> <strain> <platform> <cov>
 
-For details on the pipelines look at scripts/README.md or launch each script with option "-h"
+For details on the pipelines look at pipelines/README.md or launch each script with option "-h"
 
