@@ -43,7 +43,7 @@ elif [ ! -d ${nanopolish_version} ] ; then
 fi
 
 
-reads=$thisdir/../fastqs/ont/$strain\_pass2D.fastq
+reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
 drafta=$thisdir/results/canu/$strain\_ont/$strain.contigs.fasta
 
 

@@ -28,8 +28,8 @@ fi
 
 
 
-pbreads=$thisdir/../fastqs/pacbio/s288c_pacbio.fastq
-ontreads=$thisdir/../fastqs/ont/s288c_pass2D.fastq
+pbreads=$thisdir/../fastqs/pacbio/$strain/s288c_pacbio.fastq
+ontreads=$thisdir/../fastqs/ont/$strain/s288c_pass2D.fastq
 
 mkdir -p $wdir
 cd $wdir

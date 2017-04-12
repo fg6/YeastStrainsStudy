@@ -36,16 +36,16 @@ fi
 inputfa=$thisdir/results/spades/$strain\_miseq/contigs.fasta
 
 if [ $platform == 'ont' ]; then
-        reads=$thisdir/../fastqs/ont/$strain\_pass2D.fastq
+        reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
 
 else
         echo pacbio
         if [ $strain == 's288c' ]; then	
-	    reads=$thisdir/../fastqs/pacbio/s288c_pacbio_ontemu_31X.fastq
+	    reads=$thisdir/../fastqs/pacbio/$strain/s288c_pacbio_ontemu_31X.fastq
 	    outdir=$outdir\_31X_ONTemu			
             echo; echo "   For pacbio s288c running the subsample with '31X' coverage"; echo
 	else
-            reads=$thisdir/../fastqs/pacbio/$strain\_pacbio.fastq    
+            reads=$thisdir/../fastqs/pacbio/$strain/$strain\_pacbio.fastq    
             echo; echo "   Scaffolding using the whole pacbio data is possible but time consuming."
 	    echo; echo "   This has not been done in the paper, so I will stop now, delete or comment line:" $(($LINENO+1)) 
 	    exit 1

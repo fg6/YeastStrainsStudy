@@ -18,8 +18,8 @@ outfile=$assembler.output
 thisdir=`pwd`
 
 
-miseq1=$thisdir/../fastqs/miseq/$strain\_1.fastq
-miseq2=$thisdir/../fastqs/miseq/$strain\_2.fastq
+miseq1=$thisdir/../fastqs/miseq/$strain/$strain\_1.fastq
+miseq2=$thisdir/../fastqs/miseq/$strain/$strain\_2.fastq
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
 	echo; echo "  Usage:" $(basename $0) \<$assembler\> \<strain\> \<platform\>  \<cov\>
@@ -33,7 +33,7 @@ fi
 
 
 if [ $platform == 'ont' ]; then
-	reads=$thisdir/../fastqs/ont/$strain\_pass2D.fastq
+	reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
 	if [ ! -z ${cov-x} ] && [ $cov == 'allX' ]; then
         	echo 'allX option valid for pacbio s288c only!'
         	exit 1
@@ -60,11 +60,11 @@ else
                         echo '31X option valid for pacbio s288c only!'
                         exit 1
                 elif [ $cov == '31X' ] && [ $strain == 's288c' ]; then	
-	        	reads=$thisdir/../fastqs/pacbio/s288c_pacbio_ontemu_31X.fastq
+	        	reads=$thisdir/../fastqs/pacbio/$strain/s288c_pacbio_ontemu_31X.fastq
 			outdir=$outdir\_31X_ONTemu
 			configfile=$thisdir/configfiles/pbcr_miseq_sens.spec
 		else
-                	reads=$thisdir/../fastqs/pacbio/$strain\_pacbio.fastq
+                	reads=$thisdir/../fastqs/pacbio/$strain/$strain\_pacbio.fastq
 			configfile=$thisdir/configfiles/pbcr_miseq.spec
                 fi	
 	else	
@@ -74,7 +74,7 @@ else
                 	echo "   cov: only for pacbio s288c: choose coverage sample '31X' or 'allX' "
                 	exit 1
         	else
-                	reads=$thisdir/../fastqs/pacbio/$strain\_pacbio.fastq
+                	reads=$thisdir/../fastqs/pacbio/$strain/$strain\_pacbio.fastq
 			configfile=$thisdir/configfiles/pbcr_miseq.spec
                 fi
 
