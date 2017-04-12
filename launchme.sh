@@ -4,7 +4,7 @@ set -o pipefail
 
 thisdir=`pwd`
 
-source $thisdir/runlist.sh
+
 singlestrain=$1
 
 
@@ -26,11 +26,10 @@ fi
 ####### download some utilities ##########
 ##########################################
 echo; echo " Downloading some utilities..."
-mkdir -p $thisdir/src
-cd $thisdir/src
+cd $thisdir/utils/src
 
 if [ ! -f locpy/bin/activate ]; then
-    cd $thisdir/src
+    cd $thisdir/utils/src
     pyversion=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(major);'`
     minor=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(minor);'`
 
@@ -51,7 +50,7 @@ if [ ! -f locpy/bin/activate ]; then
     
 
     virtualenv locpy
-    source $thisdir/src/locpy/bin/activate
+    source $thisdir/utils/src/locpy/bin/activate
     pip install --upgrade pip
     pip install --upgrade distribute
     pip install cython
@@ -63,21 +62,21 @@ if [ ! -f locpy/bin/activate ]; then
     deactivate
     
 fi
-source $thisdir/src/locpy/bin/activate
+source $thisdir/utils/src/locpy/bin/activate
 
-if [ ! -d  $thisdir/src/poretools ] ; then
+if [ ! -d  $thisdir/utils/src/poretools ] ; then
     # used to extract fastq from ont fast5
-    cd $thisdir/src/
+    cd $thisdir/utils/src/
     git clone https://github.com/arq5x/poretools.git
     cd poretools/
     git reset --hard 4e04e25f22d03345af97e3d37bd8cf2bdf457fc9   
     python setup.py install
 fi
 
-if [ ! -d  $thisdir/src/pbh5tools ] ; then
+if [ ! -d  $thisdir/utils/src/pbh5tools ] ; then
    #used to extract fastq from pacbio hdf5 
-    cd $thisdir/src
-    source $thisdir/src/locpy/bin/activate
+    cd $thisdir/utils/src
+    source $thisdir/utils/src/locpy/bin/activate
     which python
     pip install pysam
     pip install h5py
@@ -87,17 +86,17 @@ if [ ! -d  $thisdir/src/pbh5tools ] ; then
     python setup.py install
 fi
 
-if [ ! -d  $thisdir/src/fq2fa ] ; then
+if [ ! -d  $thisdir/utils/src/fq2fa ] ; then
     ## fastq 2 fasta
-    cd $thisdir/src
+    cd $thisdir/utils/src
     git clone -b nogzstream https://github.com/fg6/fq2fa.git
     cd fq2fa
     make
 fi
 	
-if [ ! -d  $thisdir/src/random_subreads ] ; then
+if [ ! -d  $thisdir/utils/src/random_subreads ] ; then
      ## subsample generator
-    cd $thisdir/src
+    cd $thisdir/utils/src
     git clone -b YeastStrainsStudy https://github.com/fg6/random_subreads.git
 fi
 
@@ -110,13 +109,14 @@ if [[ ${#strains[@]} -eq 0 ]]; then exit; fi
 ###################################################
   echo; echo " Downloading and preparing data..."
 ###################################################
+source $thisdir/utils/runlist.sh
 
 
 ###########################################
 ########## Download data from ENA #########
 ###########################################
 cd $thisdir
-source $thisdir/src/locpy/bin/activate
+source $thisdir/utils/src/locpy/bin/activate
 
 
 #******************* ONT ******************* #
@@ -248,7 +248,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    # files are downloaded, now extract fastq 	    
 	    for file in *.bas.h5; do
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
-		    python $thisdir/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file 
+		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file 
 		fi
 	    done
 	    
@@ -259,6 +259,12 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    cat $f >> $strain\_pacbio.fastq
 	done 
 	chmod -w $strain\_pacbio.fastq
+
+
+	if [ $strain == "s288c" ]; then
+	    echo recreate pacbio s288c subsample 31X
+
+	fi
 	
    fi ## if ! global fastq file 
 
