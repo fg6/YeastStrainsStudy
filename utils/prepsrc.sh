@@ -31,8 +31,8 @@ if [ ! -f locpy/bin/activate ]; then
     fi
     
    virtualenv $thisdir/utils/src/locpy
- fi
-exit
+
+
     source $thisdir/utils/src/locpy/bin/activate
     pip install --upgrade pip
     pip install --upgrade distribute
@@ -44,9 +44,9 @@ exit
     pip install seaborn
     deactivate
     
-#fi
+fi
 
-exit
+
 source $thisdir/utils/src/locpy/bin/activate
 
 if [ ! -d  $thisdir/utils/src/poretools ] ; then
