@@ -12,7 +12,7 @@ mybwa=$4
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=npscarf
 assembler_info=`echo $assembler version  1.6-08a`

@@ -5,7 +5,7 @@ set -o pipefail
 
 thisdir=`pwd`
 wdir=results/pacbio_ontemu_subsample31X
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 
 if [ $1 == '-h' ]; then

@@ -17,7 +17,7 @@ outdir=$strain\_$platform
 outfile=$assembler.output
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
 	echo; echo "  Usage:" $(basename $0) \<$assembler\> \<strain\> \<platform\>  \<cov\>

@@ -12,7 +12,7 @@ cov=$5
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=miniasm
 assembler_info=`echo  minimap r122 and miniasm r104`

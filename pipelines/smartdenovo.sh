@@ -11,7 +11,7 @@ cov=$4
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=smartdenovo
 assembler_info=`echo $assembler version 1.1`

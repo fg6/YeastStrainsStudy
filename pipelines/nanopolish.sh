@@ -19,7 +19,7 @@ wdir=results/nanopolish_on_canu_s288c_ont
 exetype='NANOPOLISH_vs_0.5.0_FOLDER/'
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 if [ $# -lt 4 ]  || [ $1 == '-h' ]; then
         echo; echo "  Runs nanpolish on the s288c ont pass2D Canu assembly"

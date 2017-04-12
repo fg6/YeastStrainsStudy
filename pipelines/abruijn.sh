@@ -9,7 +9,7 @@ platform=$3
 cov=$4
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 assembler=abruijn
 assembler_info=`echo $assembler version 0.4b python`
 wdir=results/abruijn

@@ -10,7 +10,7 @@ platform=$3
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=spades
 assembler_info=`echo $assembler version 3.7.1`

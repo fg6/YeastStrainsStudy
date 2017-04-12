@@ -13,7 +13,7 @@ cov=$6
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=racon
 assembler_info=`echo racon github commit 28980bec3e98189853ed919764d5a8a9e6291264`

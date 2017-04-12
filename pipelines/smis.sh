@@ -10,7 +10,7 @@ platform=$3
 
 
 thisdir=`pwd`
-srcdir=$thisdir/../src
+srcdir=$thisdir/../utils/src
 
 assembler=smis
 assembler_info=`echo $assembler version v0.1-alpha`
