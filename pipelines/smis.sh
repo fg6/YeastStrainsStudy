@@ -30,13 +30,13 @@ if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
         exit 1
 fi
 
-echo MYBAMTOOLS=$bamtools
+
 export MYBAMTOOLS=$bamtools
 if [ ! -d  $thisdir/../utils/src/smis ] ; then
     cd $thisdir/../utils/src/
     git clone https://github.com/fg6/smis.git &> /dev/null
     cd smis
-    ./makeall.sh #&> /dev/null
+    ./makeall.sh 1> /dev/null
 fi
 
 inputfa=$thisdir/results/spades/$strain\_miseq/contigs.fasta
