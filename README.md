@@ -23,13 +23,16 @@ Usage:
 The first time you launch launchme.sh, it will download and compile needed codes independently 
 on the strain/option chosen.
 
-example:     
-		$  ./launchme.sh s288c 0
+	example: $  ./launchme.sh s288c 0
 
-Max disk space required (for clean=0):
+#### Max disk space required (for clean=0):
+
 s288c:  ~650GB 
+
 sk1:
+
 n44:
+
 cbs:
 
 Total final disk space after cleaning (clean=1): < 30GB.
