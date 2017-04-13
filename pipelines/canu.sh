@@ -104,6 +104,6 @@ else
 	cd $wdir
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
 	echo "  Assembly will be in $wdir/$outdir/$strain.contigs.fasta "
-	$command  
+	$command &> $outfile
 fi
 

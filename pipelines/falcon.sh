@@ -110,7 +110,7 @@ else
 	echo "  Assembly will be in $wdir/$outdir/2-asm-falcon/p_ctg.fa "
 
 	source $myexe/fc_env/bin/activate
-	fc_run.py fc_run.cfg 
+	fc_run.py fc_run.cfg  &> $outfile
 
 fi
 

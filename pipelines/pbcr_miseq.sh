@@ -108,8 +108,8 @@ else
 	echo $myfastqToCA
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
 	echo "  Assembly will be in $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta"
-	$myfastqToCA -libraryname illumina -technology illumina -type sanger -innie -insertsize 390 80 -mates $miseq1,$miseq2 > illumina.frg
-	$myexe  -length 500 -partitions 200 -l $strain -s $(basename $configfile) -fastq $reads  genomeSize=12160000 illumina.frg
+	$myfastqToCA -libraryname illumina -technology illumina -type sanger -innie -insertsize 390 80 -mates $miseq1,$miseq2 > illumina.frg  &> $outfile
+	$myexe  -length 500 -partitions 200 -l $strain -s $(basename $configfile) -fastq $reads  genomeSize=12160000 illumina.frg  &>> $outfile
 
 fi
 

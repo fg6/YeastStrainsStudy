@@ -110,6 +110,6 @@ else
     echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
     echo  "  Assembly will be in " $wdir/$outdir/wtasm.dmo.cns
     $command1  > yeast.mak
-    $command2
+    $command2  &> $outfile
 fi
 

@@ -80,6 +80,6 @@ else
 
 	$myexe/setup.sh $thisdir/$wdir/$outdir/ $inputfa $reads > /dev/null
 	cd $thisdir/$wdir/$outdir/
-	./mysmissv.sh
+	./mysmissv.sh  &> $outfile
 fi
 

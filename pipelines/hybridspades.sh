@@ -83,4 +83,4 @@ cd $wdir/
 echo; echo  "  Running:" $assembler on  $(basename $read1),$(basename $read2) and $reads in folder $wdir/$outdir ; echo 
 echo  "  Assembly will be in " $wdir/$outdir/contigs.fasta
 
-python $myexe  --careful --pe1-1 $read1 --pe1-2 $read2  --nanopore $reads -t 24 -o $outdir
+python $myexe  --careful --pe1-1 $read1 --pe1-2 $read2  --nanopore $reads -t 24 -o $outdir  &> $outfile

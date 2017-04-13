@@ -83,8 +83,9 @@ else
 	echo  "  Assembly will be in " $wdir/$outdir/npScarf.fin.fasta
 	
 
-	$myexe/jsa.seq.sort -r -n --input $inputfa --output sort_spades.fasta 
-	$mybwa index sort_spades.fasta
-	$mybwa mem -t 10  -x ont2d  -a -Y sort_spades.fasta $reads  | $myexe/jsa.np.gapcloser -b - -seq sort_spades.fasta  --verbose --prefix=npScarf   	
+	$myexe/jsa.seq.sort -r -n --input $inputfa --output sort_spades.fasta   &> $outfile
+	$mybwa index sort_spades.fasta  &>> $outfile
+	$mybwa mem -t 10  -x ont2d  -a -Y sort_spades.fasta $reads  | $myexe/jsa.np.gapcloser -b - -seq sort_spades.fasta  --verbose --prefix=npScarf    &>> $outfile
+	
 fi
 
