@@ -7,7 +7,7 @@ set -o pipefail
 mynanopolish=$1
 mysamtools=$2
 mybwa=$3
-fast5dir=$4
+fast5dir=
 
 strain=s288c
 platform=ont
@@ -27,8 +27,7 @@ if [ $# -lt 4 ]  || [ $1 == '-h' ]; then
 	echo "  " $assembler: location of $assembler_info folder:  $exetype
 	echo "  " samtools: location of samtools
 	echo "  " bwa: location of bwa
-	echo "  " fast5dir: nanopolish needs the location of the MinION fast5 file. These files can be downloaded from ENA accession number PRJEB19900.
-	echo "      "  Download the fast5 for s288c, untar the folder and provide the folder location to this script.
+	echo "  " Warning: please notice that nanopolish needs the original MinION fast5 file. If you deleted them, you need to re-download them with the launchme.sh script"
 	
         exit 1
 fi
@@ -42,7 +41,7 @@ elif [ ! -d ${nanopolish_version} ] ; then
 	exit 1
 fi
 
-
+fast5dir=$thisdir/../fastqs/ont/$strain
 reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
 drafta=$thisdir/results/canu/$strain\_ont/$strain.contigs.fasta
 
