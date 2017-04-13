@@ -46,7 +46,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
     echo "   preparing ONT data for " $strain
     if [ ! -f $strain\_pass2D.fastq ]; then   ##  if fastq file is not there already
 
-	echo "       downloading data "
+	echo "           downloading data "
 	thislist=ont${strain}[@]
 	for tarfile  in "${!thislist}"; do   # loop over ont runs
 	    file=$ontftp/$tarfile
@@ -60,13 +60,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		fi
 	    fi
 
-	    echo "       untar data "
+	    echo "           untar data "
 	    if [ ! -d $fold ] && [ ! -f $fold\_pass2D.fastq ] ; then # untar if not done already
 		tar -xvzf $tarfile  &> /dev/null
 	    fi
 	    
 	    if [ ! -f $fold\_pass2D.fastq ]; then  # extract fastq from fast5, if not done already
-		echo "       creating fastqs "
+		echo "           creating fastqs "
 	    
 		fast5pass=$fold/reads/downloads/pass
 		fast5fail=$fold/reads/downloads/fail
@@ -98,7 +98,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	if [ $fqs -eq 0 ]; then  
 	    echo; echo " Error! no ONT fastqs found or creaed"  $strain
 	else
-	    echo " Merging " $fqs "fastqs for the " $strain " strain"
+	    echo "           merging fastqs "
 	    
 	    for f in *_pass2D.fastq; do 
 		cat $f >> $strain\_pass2D.fastq
@@ -119,10 +119,25 @@ for strain in "${strains[@]}"; do   ## loop on strains
     # clean all except fastq files before starting next strain
     if [ -f $strain\_pass2D.fastq ]; then 
 	notempty=`head -1 $strain\_pass2D.fastq | wc -l`
-	if [ $notempty -gt 0 ] && [ $clean -gt 0 ]; then
-	    dd=`ls -I "*fastq" | wc -l`
-	    if [ $dd -gt 0 ]; then  
-		rm -r $(ls -I "*fastq")
+	if [ $notempty -gt 0 ]; then
+	    if [ $strain == "s288c" ] && [ $clean -gt 0 ]; then
+		clean=0
+		reallyclean=0
+		echo "           Warning: if you delete the fast5 files you will not be able to run nanopolish!"
+		echo "           are you sure you want to clean up the fast5 files? [yes,y or no,n] "
+		read reallyclean
+		if [ $reallyclean == "y" ] || [ $reallyclean == "yes" ]; then
+		    clean=1
+		else
+		    clean=0
+		fi
+	    fi
+	    if [ $clean -gt 0 ]; then
+		dd=`ls -I "*fastq" | wc -l`
+		
+		if [ $dd -gt 0 ]; then  
+		    rm -r $(ls -I "*fastq")
+		fi
 	    fi
 	fi
     fi
@@ -142,32 +157,34 @@ for strain in "${strains[@]}"; do   ## loop on strains
     cd  $folder/$strain
 
     echo "   preparing PacBio data for " $strain
-
+   
     if [ ! -f $strain\_pacbio.fastq ]; then  ##  if fastq file is not there already
 
-	echo "       downloading data "
 	runs=pb${strain}[@]
 	for run in "${!runs}"; do   ## loop over pacbio runs
 	    
 	    thislist=pb$strain\_${run}[@]
 	    for tarfile  in "${!thislist}"; do # loop over pacbio runs
 		if [ ! -f $(basename $tarfile) ]; then  # download if file is not there already
+		    if [[ $ii == 0 ]]; then echo "           downloading " $tarfile; fi
 		    if [[ `wget -S --spider $tarfile 2>&1  | grep exists` ]]; then
 			wget $tarfile  &> /dev/null
 		    else 
-			echo "Could not find url " $tarfile
+			echo "Could not find url " $tarfile &> prepdata_output.txt
 		    fi
 		fi
 	    done  # download each file in a run
 
+
+	    
 	    # files are downloaded, now extract fastq 	    
-	    echo "       creating fastq "
+	    echo "           extracting fastqs"
 	    for file in *.bas.h5; do
+		echo $file
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
-		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file   &> /dev/null
+		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file  &>> prepdata_output.txt
 		fi
 	    done
-	    
 	done  ## runs
 
 	# fastq per run ready: now merge them in a single file
@@ -176,13 +193,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	done 
 	chmod -w $strain\_pacbio.fastq
 
-	if [ $strain == "s288c" ]; then
-	    echo "   ... recreate pacbio s288c subsample 31X"
+	if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
+	    echo "           recreating pacbio s288c subsample 31X ONT-Emu"
 	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt
 	fi
 	
-   fi ## if ! global fastq file 
-
+    fi ## if ! global fastq file 
+    
    # if all successful: clean all except fastq files before starting next strain
    if [ -f $strain\_pacbio.fastq ]; then 
 	notempty=`head -1 $strain\_pacbio.fastq | wc -l`
