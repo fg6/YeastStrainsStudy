@@ -16,7 +16,7 @@ exetype='CANU_vs1.3_LOCATION/canu'
 command=`echo $myexe -p $strain genomeSize=12.16m useGrid=0`
 lowcov=`echo corMhapSensitivity=high corMinCoverage=2 errorRate=0.025 minOverlapLength=499 corMaxEvidenceErate=0.3  useGrid=0`
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
 
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ] ; then

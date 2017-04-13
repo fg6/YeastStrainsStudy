@@ -17,7 +17,8 @@ wdir=results/spades
 exetype='SPADES_vs3.7.1_LOCATION/spades.py'
 
 outdir=$strain
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 2 ]  || [ $1 == '-h' ]; then

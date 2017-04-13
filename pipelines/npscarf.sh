@@ -20,7 +20,8 @@ wdir=results/npscarf
 exetype='npscarf_vs1.6-08a_FOLDER/'
 
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 4 ]  || [ $1 == '-h' ]; then

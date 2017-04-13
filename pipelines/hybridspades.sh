@@ -18,7 +18,8 @@ wdir=results/hybridspades
 exetype='HYBRIDSPADES_vs1.0_LOCATION/spades.py'
 
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ]; then

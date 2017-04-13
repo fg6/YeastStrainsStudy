@@ -14,7 +14,8 @@ assembler_info=`echo $assembler version 1.3`
 wdir=results/falcon
 exetype='FALCON-integrate_vs0.3.0_FOLDER/'
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 thisdir=`pwd`
 srcdir=$thisdir/../utils/src

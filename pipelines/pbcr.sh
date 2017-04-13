@@ -14,7 +14,8 @@ assembler_info=`echo $assembler from Celera 8.3rc2`
 wdir=results/pbcr
 exetype='PBCR_vs8.3rc2_LOCATION/PBcR'
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 thisdir=`pwd`
 

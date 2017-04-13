@@ -21,7 +21,8 @@ exetype1='MINIMAP_vsr122_LOCATION/minimap'
 exetype2='MINIASM_vsr104_LOCATION/miniasm'
 
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 4 ]  || [ $1 == '-h' ]; then

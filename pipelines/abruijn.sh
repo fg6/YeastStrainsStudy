@@ -15,7 +15,8 @@ assembler_info=`echo $assembler version 0.4b python`
 wdir=results/abruijn
 exetype='ABRUIJN_vs0.4b_LOCATION/abruijn.py'
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 if [ $# -lt 3 ] || [ $1 == '-h' ]; then
 	echo; echo "  Usage:" $(basename $0) \<$assembler\> \<strain\> \<platform\>

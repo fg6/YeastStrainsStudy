@@ -18,7 +18,8 @@ wdir=results/smis
 exetype='smis_v0.1-alpha_FOLDER/'
 
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ]; then

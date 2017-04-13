@@ -23,7 +23,8 @@ exetype2='MINIASM_vsr104_LOCATION/miniasm'
 exetype3='RACON_FOLDER/'
 
 outdir=$strain\_$platform
-outfile=$assembler.output
+outfile=$assembler\_$strain\_$platform.output
+
 
 
 if [ $# -lt 5 ]  || [ $1 == '-h' ]; then
