@@ -3,6 +3,7 @@ Scripts to run pipeline for paper [ref-needed]
 
 ## Instructions #####
 
+
 ### Download data and needed utilities #####
 Download and compile needed codes and download data use the launchme.sh script.
 
@@ -49,6 +50,11 @@ make sure this is available in your PATH, together with virtualenv.
 
 ### Pipelines
 After 'launchme.sh', you can run the  various pipelines, from the 'pipelines' folder
+Please notice that the assemblers and scaffolders (except for smis) are not installed 
+by the launchme.sh script. To run the pipelines you need to have installations of:
+Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),
+SPAdes () and  npScarf().
+Additional software needed: bwa and samtools 
 
 example:	
 
