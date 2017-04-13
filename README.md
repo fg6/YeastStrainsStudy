@@ -25,8 +25,9 @@ on the strain/option chosen.
 
 	example: $  ./launchme.sh s288c 0
 
-#### Max disk space required (for clean=0):
+#### Max disk space required:
 
+If not cleaning up (clean=0):
 s288c:  ~650GB 
 
 sk1:
@@ -35,7 +36,8 @@ n44:
 
 cbs:
 
-Total final disk space after cleaning (clean=1): < 30GB.
+After cleaning (clean=1): 
+ all strains:  < 30GB.
 
 #### Requirements:
 To install 'poretools' a python version >= 2.7 is needed. Please 
