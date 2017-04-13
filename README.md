@@ -50,11 +50,6 @@ make sure this is available in your PATH, together with virtualenv.
 
 ### Pipelines
 After 'launchme.sh', you can run the  various pipelines, from the 'pipelines' folder
-Please notice that the assemblers and scaffolders (except for smis) are not installed 
-by the launchme.sh script. To run the pipelines you need to have installations of:
-Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),
-SPAdes () and  npScarf().
-Additional software needed: bwa and samtools 
 
 example:	
 
@@ -62,4 +57,10 @@ example:
 	./canu.sh <canu_location> <strain> <platform> <cov>
 
 For details on the pipelines look at pipelines/README.md or launch each script with option "-h"
+
+#### Warning! Please notice that the assemblers and scaffolders (except for smis) are not installed
+by the launchme.sh script. To run the pipelines you need to have installations of:
+Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),
+SPAdes () and  npScarf().
+Additional software needed: bwa and samtools
 
