@@ -34,7 +34,8 @@ After cleaning (clean=1):  Total: < 30GB.
 #### Requirements for installing and preparing data:
 To install 'poretools' a python version >= 2.7 is needed. Please 
 make sure this is available in your PATH, together with virtualenv.
-
+Installing smis require bamtools, please define the env variable:
+export MYBAMTOOLS=/full/path/to/bamtools
 
 
 ### Pipelines
@@ -59,5 +60,5 @@ For details on the pipelines look at pipelines/README.md or launch each script w
 #### Nanopolish (https://github.com/jts/nanopolish)
 #### SPAdes (http://bioinf.spbau.ru/spades) 
 #### npScarf(https://github.com/mdcao/npScarf).
-#### Additional software needed: bwa (https://github.com/lh3/bwa), samtools (https://github.com/samtools/samtools), bamtools (https://github.com/pezmaster31/bamtools)
+#### Additional software needed: bwa (https://github.com/lh3/bwa), samtools (https://github.com/samtools/samtools)
 
