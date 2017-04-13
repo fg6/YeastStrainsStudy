@@ -34,7 +34,7 @@ source $thisdir/utils/src/locpy/bin/activate
 ##############################################
 
 folder=$thisdir/fastqs/ont
-	
+
 mkdir -p $folder
 cd $folder
 
@@ -43,7 +43,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
     cd  $folder/$strain
 
 
-    
+    echo "   preparing ONT data for " $strain
     if [ ! -f $strain\_pass2D.fastq ]; then   ##  if fastq file is not there already
 
 	thislist=ont${strain}[@]
@@ -137,6 +137,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
 
+    echo "   preparing PacBio data for " $strain
 
     if [ ! -f $strain\_pacbio.fastq ]; then  ##  if fastq file is not there already
 
@@ -197,16 +198,19 @@ mkdir -p $folder
 cd $folder
 
 for strain in "${strains[@]}"; do
-    mkdir -p $folder/$strain
-    cd  $folder/$strain
+    mkdir -p $folder
+    cd  $folder
+    echo "   preparing MiSeq data for " $strain
 
-    thislist=miseq${strain}[@]
-    for cramfile  in "${!thislist}"; do
+    thislist=miseq_${strain}[@]
+   
+    for cramfile in "${!thislist}"; do
 	file=$miseqftp/$cramfile
-	if [ -f $cramfile ]; then
+	if [ ! -f $strain\_1.fastq ]; then
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	#wget $miseqftp/$cramfile
-		echo "   " $strain $file ok
+	    	wget $file  &> /dev/null
+		$thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $cramfile &>/dev/null
+		rm $cramfile
 	    else 
 		echo "Could not find url " $file
 	    fi
