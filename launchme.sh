@@ -14,24 +14,14 @@ if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
     exit
 fi
 
-if  [ $singlestrain == "none" ]; then
-    strains=( )
-elif [ $singlestrain != "all" ]; then
+
+if [ $singlestrain != "all" ]; then
     strains=( $singlestrain )
 else
     strains=( s288c sk1 cbs n44 )
 fi
 
-##########################################
-####### download some utilities ##########
-##########################################
-echo; echo " Downloading some utilities..."
-$thisdir/utils/prepsrc.sh
-echo "                 ... all srcs ready!"
 
-
-# if 'none' option: all done, end here
-if [[ ${#strains[@]} -eq 0 ]]; then exit; fi
 
 
 ###################################################
@@ -41,3 +31,7 @@ if [[ ${#strains[@]} -eq 0 ]]; then exit; fi
 cd $thisdir
 $thisdir/utils/prepdata.sh $singlestrain $clean
 echo "                 ... requested data ready!"
+
+
+
+### add check for fastqs
