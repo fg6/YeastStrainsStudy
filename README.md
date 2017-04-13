@@ -20,7 +20,7 @@ example:
 Please note that downloading data and preparing the fastq files is very time consuming. 
 Max disk space required during data preparation:
 
-s288c: ont ~630GB  (pacbio 26GB)
+s288c: ont ~630GB  (pacbio 26GB)  miseq 2GB
 sk1:
 n44:
 cbs:
