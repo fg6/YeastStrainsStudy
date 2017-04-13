@@ -3,9 +3,9 @@ set -o errexit
 set -o pipefail
 
 
-
-strain=$1
-platform=$2
+bamtools=$1
+strain=$2
+platform=$3
 
 
 
@@ -21,14 +21,23 @@ outfile=$assembler\_$strain\_$platform.output
 
 
 
-if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
-	echo; echo "  Usage:" $(basename $0) \<strain\> \<platform\>
+if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
+	echo; echo "  Usage:" $(basename $0) \<bamtools\> \<strain\> \<platform\> 
+	echo "   bamtools: /full/path/to/bamtools "
 	echo "   strain:  s288c, sk1, n44 or cbs. Please notice that for PacBio, only s288c on the 31X  subsample has been run. "
 	echo "   platform: ont or pacbio "
 	echo; echo "   Please make sure you have run 'spades.sh /full/path/to/spades <strain> <platform>'  before running smis!"
         exit 1
 fi
 
+echo MYBAMTOOLS=$bamtools
+export MYBAMTOOLS=$bamtools
+if [ ! -d  $thisdir/../utils/src/smis ] ; then
+    cd $thisdir/../utils/src/
+    git clone https://github.com/fg6/smis.git &> /dev/null
+    cd smis
+    ./makeall.sh #&> /dev/null
+fi
 
 inputfa=$thisdir/results/spades/$strain\_miseq/contigs.fasta
 
@@ -46,6 +55,9 @@ else
 	    exit 1
 	fi	
 fi
+
+
+ 
 
 if [ ! -d ${myexe} ] ; then
 	echo "  Could not find folder for smis:" ${myexe};
