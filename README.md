@@ -59,5 +59,5 @@ For details on the pipelines look at pipelines/README.md or launch each script w
 #### Nanopolish (https://github.com/jts/nanopolish)
 #### SPAdes (http://bioinf.spbau.ru/spades) 
 #### npScarf(https://github.com/mdcao/npScarf).
-#### Additional software needed: bwa (https://github.com/lh3/bwa) and samtools (https://github.com/samtools/samtools)
+#### Additional software needed: bwa (https://github.com/lh3/bwa), samtools (https://github.com/samtools/samtools), bamtools (https://github.com/pezmaster31/bamtools)
 
