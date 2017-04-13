@@ -97,10 +97,3 @@ if [ ! -d  $thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-et
 fi
 
 
-if [ ! -d  $thisdir/utils/src/smis ] ; then
-    git clone https://github.com/fg6/smis.git
- 
-    cd smis
-    ./makeall.sh
-fi   
- 
