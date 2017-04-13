@@ -25,7 +25,7 @@ on the strain/option chosen.
 
 	example: $  ./launchme.sh s288c 0
 
-#### Max disk space required:
+#### Disk space required:
 
 ##### If not cleaning up (clean=0):
 	
