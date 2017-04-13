@@ -27,9 +27,9 @@ Usage:
 
 #### Disk space required:
 
-##### If not cleaning up (clean=0): Total: 1.5TB
+If not cleaning up (clean=0): Total: 1.5TB
 
-##### After cleaning (clean=1):  Total: < 30GB.
+After cleaning (clean=1):  Total: < 30GB.
 
 #### Requirements for installing and preparing data:
 To install 'poretools' a python version >= 2.7 is needed. Please 
