@@ -88,3 +88,10 @@ if [ ! -d  $thisdir/utils/src/random_subreads ] ; then
     git clone -b YeastStrainsStudy https://github.com/fg6/random_subreads.git &> /dev/null
 fi
 
+if [ ! -d  $thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu ] ; then
+    echo " Downloading biobambam/bamtofastq "
+    cd $thisdir/utils/src
+    wget https://github.com/gt1/biobambam2/releases/download/2.0.37-release-20160407134604/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu.tar.gz &> /dev/null
+     tar -xvzf biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu.tar.gz > /dev/null
+     rm biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu.tar.gz
+fi
