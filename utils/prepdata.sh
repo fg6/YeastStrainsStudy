@@ -121,18 +121,20 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	notempty=`head -1 $strain\_pass2D.fastq | wc -l`
 	if [ $notempty -gt 0 ]; then
 	    if [ $strain == "s288c" ] && [ $clean -gt 0 ]; then
-		clean=0
+		ontclean=0
 		reallyclean=0
 		echo "           Warning: if you delete the fast5 files you will not be able to run nanopolish!"
 		echo "           are you sure you want to clean up the fast5 files? [yes,y or no,n] "
 		read reallyclean
 		if [ $reallyclean == "y" ] || [ $reallyclean == "yes" ]; then
-		    clean=1
+		    ontclean=1
 		else
-		    clean=0
+		    ontclean=0
 		fi
+	    else
+		ontclean=$clean
 	    fi
-	    if [ $clean -gt 0 ]; then
+	    if [ $ontclean -gt 0 ]; then
 		dd=`ls -I "*fastq" | wc -l`
 		
 		if [ $dd -gt 0 ]; then  
