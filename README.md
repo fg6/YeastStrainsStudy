@@ -60,6 +60,6 @@ For details on the pipelines look at pipelines/README.md or launch each script w
 
 #### Warning! Please notice that the assemblers and scaffolders (except for smis) are not installed by the launchme.sh script. To run the pipelines you need to have installations of:
 
-#### Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),SPAdes () and  npScarf().
-#### Additional software needed: bwa and samtools
+#### Abruijn (https://github.com/fenderglass/ABruijn), Canu (https://github.com/marbl/canu), PBcR (http://wgs-assembler.sourceforge.net/wiki/index.php/PBcR), Falcon-integrate (https://github.com/PacificBiosciences/FALCON-integrate), Smartdenovo (https://github.com/ruanjue/smartdenovo), MiniAsm and MiniMap (https://github.com/lh3/miniasm,https://github.com/lh3/minimap/), Racon (https://github.com/isovic/racon), nanopolish (https://github.com/jts/nanopolish),SPAdes (http://bioinf.spbau.ru/spades) and  npScarf(https://github.com/mdcao/npScarf).
+#### Additional software needed: bwa (https://github.com/lh3/bwa) and samtools (https://github.com/samtools/samtools)
 
