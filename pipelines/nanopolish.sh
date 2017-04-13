@@ -7,7 +7,7 @@ set -o pipefail
 mynanopolish=$1
 mysamtools=$2
 mybwa=$3
-fast5dir=
+
 
 strain=s288c
 platform=ont
@@ -21,13 +21,14 @@ exetype='NANOPOLISH_vs_0.5.0_FOLDER/'
 thisdir=`pwd`
 srcdir=$thisdir/../utils/src
 
-if [ $# -lt 4 ]  || [ $1 == '-h' ]; then
+if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
         echo; echo "  Runs nanpolish on the s288c ont pass2D Canu assembly"
 	echo "  Usage:" $(basename $0) \<$assembler\> \<samtools\> \<bwa\> \<fast5dir\>
 	echo "  " $assembler: location of $assembler_info folder:  $exetype
 	echo "  " samtools: location of samtools
 	echo "  " bwa: location of bwa
-	echo "  " Warning: please notice that nanopolish needs the original MinION fast5 file. If you deleted them, you need to re-download them with the launchme.sh script"
+	echo ; echo "  Warning: please notice that nanopolish needs the original MinION fast5 file. "
+	echo "  If you deleted them, you need to re-download them with the launchme.sh script"
 	
         exit 1
 fi
