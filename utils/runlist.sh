@@ -4,8 +4,8 @@
 
 ontftp=ftp://ftp.sra.ebi.ac.uk/vol1/ERA846/ERA846167/oxfordnanopore_native
 onts288c=( data_Sanger_FAA86705_s288c_5_a_d.tar.gz data_sanger_FAA102569_s288c_6_a.tar.gz data_sanger_FAA95877_s288c_7_a_b.tar.gz data_sanger_FAA97907_s288c_8_a.tar.gz data_sanger_FAD11925_s288c_10_a.tar.gz data_sanger_FAD11074_s288c_11_a.tar.gz )
-ontsk1=( data_Sanger_FAA86758_SK1_1_a_d.tar.gz data_sanger_FAA95799_SK1_2_a.tar.gz data_archive_Sanger_FAA32639_N44_1a.tar.gz data_archive_Sanger_FAA41229_N44_2a.tar.gz )
-ontn44=( data_archived_Sanger_FAA7552_N44_3a_and_3b.tar.gz data_Sanger_FAA69750_N44_4a_d.tar.gz   )
+ontsk1=( data_Sanger_FAA86758_SK1_1_a_d.tar.gz data_sanger_FAA95799_SK1_2_a.tar.gz )
+ontn44=( data_archived_Sanger_FAA7552_N44_3a_and_3b.tar.gz data_Sanger_FAA69750_N44_4a_d.tar.gz data_archive_Sanger_FAA32639_N44_1a.tar.gz data_archive_Sanger_FAA41229_N44_2a.tar.gz  )
 ontcbs=( data_archived_Sanger_FAA46953_CBS432_2a_and_2d.tar.gz Sanger_archived_FAA52213_CBS432_Phenol_3a.tar.gz data_archived_Sanger_FAA46993_CBS432_2b_and_2c.tar.gz data_Sanger_CBS432_Qiagen_4a.tar.gz data_Sanger_FAA69049_CBS342_MegaPure_5a_d.tar.gz data_archive_Sanger_FAA45530_CBS432_1b.tar.gz )
 
 
