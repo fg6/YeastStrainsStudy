@@ -119,4 +119,10 @@ pbn44_ERR1080535=( $pbftpn44/m150814_165424_00127_c10082315255000000182317711103
 
 
 #******************* MiSeq ******************* #
+miseqftp=ftp://ftp.sanger.ac.uk/pub/users/fg6/yeast_test
+miseq_s288c=( 18429_1_1.cram )
+miseq_cbs=( 18429_1_2.cram )
+miseq_n44=( 18429_1_3.cram )
+miseq_sk1=( 18429_1_4.cram )
+
 
