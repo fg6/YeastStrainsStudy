@@ -4,33 +4,30 @@ set -o pipefail
 
 
 
-myexe=$1
-strain=$2
-platform=$3
+strain=$1
+platform=$2
+
+
 
 
 thisdir=`pwd`
 srcdir=$thisdir/../utils/src
 
-assembler=smis
-assembler_info=`echo $assembler version v0.1-alpha`
+assembler=$thisdir/../utils/src/smis
 wdir=results/smis
-exetype='smis_v0.1-alpha_FOLDER/'
 
 outdir=$strain\_$platform
 outfile=$assembler\_$strain\_$platform.output
 
 
 
-if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
-	echo; echo "  Usage:" $(basename $0) \<$assembler\> \<strain\> \<platform\>
-	echo "  " $assembler: location of $assembler_info script \(download from Github: https://github.com/fg6/smis\)
+if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
+	echo; echo "  Usage:" $(basename $0) \<strain\> \<platform\>
 	echo "   strain:  s288c, sk1, n44 or cbs. Please notice that for PacBio, only s288c on the 31X  subsample has been run. "
 	echo "   platform: ont or pacbio "
 	echo; echo "   Please make sure you have run 'spades.sh /full/path/to/spades <strain> <platform>'  before running smis!"
         exit 1
 fi
-
 
 
 inputfa=$thisdir/results/spades/$strain\_miseq/contigs.fasta
