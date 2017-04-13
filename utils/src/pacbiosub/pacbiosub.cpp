@@ -11,8 +11,8 @@
 int main(int argc, char *argv[])
 { 
 
-  if (argc == 2) {
-   fprintf(stderr, "Usage: %s <reads.fq/fa> \n", argv[0]);
+  if (argc < 3) {
+   fprintf(stderr, "Usage: %s <reads.fq/fa> <pacbio_reads_list>\n", argv[0]);
    return 1;
   }	
   std::ifstream file(argv[1]);  
@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
   } 
  
   // read list of reads
-  char readfile[21]={"pacbio_31X_reads.txt"};
-  getreads(readfile);
+//  char readfile[21]={"pacbio_31X_reads.txt"};
+  getreads(argv[2]);
 
 
   string myname="s288c_pacbio_ontemu_31X.fastq";
