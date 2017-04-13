@@ -31,7 +31,7 @@ Usage:
 
 ##### After cleaning (clean=1):  Total: < 30GB.
 
-#### Requirements:
+#### Requirements for installing and preparing data:
 To install 'poretools' a python version >= 2.7 is needed. Please 
 make sure this is available in your PATH, together with virtualenv.
 
