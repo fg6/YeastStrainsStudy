@@ -28,14 +28,7 @@ Usage:
 #### Disk space required:
 
 ##### If not cleaning up (clean=0):
-	
-s288c:  ~650GB 
-
-sk1:
-
-n44:
-
-cbs:
+Total: 1.5TB
 
 ##### After cleaning (clean=1): 
 
