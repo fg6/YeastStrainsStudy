@@ -46,6 +46,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
     echo "   preparing ONT data for " $strain
     if [ ! -f $strain\_pass2D.fastq ]; then   ##  if fastq file is not there already
 
+	echo "       downloading data "
 	thislist=ont${strain}[@]
 	for tarfile  in "${!thislist}"; do   # loop over ont runs
 	    file=$ontftp/$tarfile
@@ -53,19 +54,20 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    
 	    if [ ! -f $tarfile ] && [ ! -f $fold\_pass2D.fastq ] ; then  # download if file is not there already
 		if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	    wget $ontftp/$tarfile
+	    	    wget $ontftp/$tarfile &> /dev/null
 		else 
 		    echo "Could not find url " $file
 		fi
 	    fi
 
+	    echo "       untar data "
 	    if [ ! -d $fold ] && [ ! -f $fold\_pass2D.fastq ] ; then # untar if not done already
-		tar -xvzf $tarfile
-		echo untar
+		tar -xvzf $tarfile  &> /dev/null
 	    fi
 	    
 	    if [ ! -f $fold\_pass2D.fastq ]; then  # extract fastq from fast5, if not done already
-		
+		echo "       creating fastqs "
+	    
 		fast5pass=$fold/reads/downloads/pass
 		fast5fail=$fold/reads/downloads/fail
 		if ! ls $fast5pass  &> /dev/null; then
@@ -126,7 +128,9 @@ for strain in "${strains[@]}"; do   ## loop on strains
     fi
 done # strain
 
+#################################################
 #******************* PacBio ******************* #
+#################################################
 
 folder=$thisdir/fastqs/pacbio
 mkdir -p $folder
@@ -141,6 +145,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
     if [ ! -f $strain\_pacbio.fastq ]; then  ##  if fastq file is not there already
 
+	echo "       downloading data "
 	runs=pb${strain}[@]
 	for run in "${!runs}"; do   ## loop over pacbio runs
 	    
@@ -148,7 +153,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    for tarfile  in "${!thislist}"; do # loop over pacbio runs
 		if [ ! -f $(basename $tarfile) ]; then  # download if file is not there already
 		    if [[ `wget -S --spider $tarfile 2>&1  | grep exists` ]]; then
-			wget $tarfile
+			wget $tarfile  &> /dev/null
 		    else 
 			echo "Could not find url " $tarfile
 		    fi
@@ -156,9 +161,10 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    done  # download each file in a run
 
 	    # files are downloaded, now extract fastq 	    
+	    echo "       creating fastq "
 	    for file in *.bas.h5; do
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
-		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file 
+		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file   &> /dev/null
 		fi
 	    done
 	    
@@ -170,10 +176,9 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	done 
 	chmod -w $strain\_pacbio.fastq
 
-
 	if [ $strain == "s288c" ]; then
-	    echo recreate pacbio s288c subsample 31X
-
+	    echo "   ... recreate pacbio s288c subsample 31X"
+	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt
 	fi
 	
    fi ## if ! global fastq file 
@@ -191,7 +196,11 @@ for strain in "${strains[@]}"; do   ## loop on strains
    
 done
 
+
+
+################################################
 #******************* MiSeq ******************* #
+################################################
 
 folder=$thisdir/fastqs/miseq
 mkdir -p $folder
