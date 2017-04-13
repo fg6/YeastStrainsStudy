@@ -59,7 +59,7 @@ example:
 For details on the pipelines look at pipelines/README.md or launch each script with option "-h"
 
 #### Warning! Please notice that the assemblers and scaffolders (except for smis) are not installed by the launchme.sh script. To run the pipelines you need to have installations of:
-Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),
-SPAdes () and  npScarf().
-Additional software needed: bwa and samtools
+
+#### Abruijn (), Canu (), PBcR (), Falcon-integrate (), Smartdenovo (), MiniAsm and MiniMap (), Racon (), nanopolish (),SPAdes () and  npScarf().
+#### Additional software needed: bwa and samtools
 
