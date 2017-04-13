@@ -13,7 +13,7 @@ Afterwards, download data and prepare fastq files with the launchme.sh script.
 
 Usage:
 
-	$  ./launchme.sh \<strain\> \<clean\> 
+	$  ./launchme.sh <strain> <clean> 
 	strain= s288c, sk1, n44, cbs or all  
 		You can download data and prepare fastq files for all the strains at once ('all' option) 
 	    	or in subsequent steps, launching 'launchme.sh strain'  subsequently. 
@@ -27,12 +27,9 @@ Usage:
 
 #### Disk space required:
 
-##### If not cleaning up (clean=0):
-Total: 1.5TB
+##### If not cleaning up (clean=0): Total: 1.5TB
 
-##### After cleaning (clean=1): 
-
-all strains:  < 30GB.
+##### After cleaning (clean=1):  Total: < 30GB.
 
 #### Requirements:
 To install 'poretools' a python version >= 2.7 is needed. Please 
