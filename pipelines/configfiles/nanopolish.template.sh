@@ -14,8 +14,8 @@ thr=10
 
 
 
-makerange=$nanopolish_version/scripts/nanopolish_makerange.py
-nanomerge=$nanopolish_version/scripts/nanopolish_merge.py
+makerange=$nanopolish_version/pipelines/nanopolish_makerange.py
+nanomerge=$nanopolish_version/pipelines/nanopolish_merge.py
 
 # Index the draft genome
 $mybwa index $drafta
