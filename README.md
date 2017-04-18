@@ -34,6 +34,7 @@ Once the data have been downloaded and the fastq files prepared, check the fastq
 If everything looks ok, you can clean up the data folders, deleting every intermediate files and folders:
 
         example: $  ./launchme.sh <strain> 1
+
 	Warning!! please notice that to run Nanopolish the original fast5 folders are needed, if you clean
 		data for the s288c strain, you will not be able to run Nanopolish until you have redownloaded the
 		data with ./launchme.sh s288c 0. It is ok to clean up the other strain data.
