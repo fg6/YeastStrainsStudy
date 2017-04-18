@@ -107,6 +107,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 	    if [ $strain == "s288c" ]; then
 	        cp $strain\_pass2D.fastq $strain\_all2D.fastq
+                chmod +w $strain\_all2D.fastq	
 		for f in *fail2D.fastq; do 
 		    cat $f >> $strain\_all2D.fastq
 		done
