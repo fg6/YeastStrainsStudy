@@ -11,8 +11,6 @@ Download and install  needed codes and scripts with install.sh:
 	
 Afterwards, download data and prepare fastq files with the launchme.sh script.
 
-Usage:
-
 	$  ./launchme.sh <strain> <clean> 
 	strain= s288c, sk1, n44, cbs or all  
 		You can download data and prepare fastq files for all the strains at once ('all' option) 
@@ -24,6 +22,22 @@ Usage:
 		if you decide later to run nanopolish, you will need to re-download the fast5 files..
 
 	example: $  ./launchme.sh s288c 0
+
+Once the data have been downloaded and the fastq files prepared, check the fastq files checksums:
+
+	$ ./utils/docheck.sh <strain> 
+
+        strain= s288c, sk1, n44, cbs or all
+                You can check the fastq files for all the strains at once ('all' option)
+                or in subsequent steps
+
+If everything looks ok, you can clean up the data folders, deleting every intermediate files and folders:
+
+        example: $  ./launchme.sh <strain> 1
+	Warning!! please notice that to run Nanopolish the original fast5 folders are needed, if you clean
+		data for the s288c strain, you will not be able to run Nanopolish until you have redownloaded the
+		data with ./launchme.sh s288c 0. It is ok to clean up the other strain data.
+
 
 #### Disk space required:
 
