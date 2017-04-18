@@ -60,7 +60,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    echo "           downloading" $tarfile >> $ofile
 	    if [ ! -f $tarfile ] && [ ! -f $fold\_pass2D.fastq ] ; then  # download if file is not there already
 		if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	    wget $ontftp/$tarfile > /dev/null 2>>$ofile 
+	    	    wget -nv -c $ontftp/$tarfile > /dev/null # &>>$ofile 
+		    
+		    if [[ "$?" != 0 ]]; then
+			echo "Error downloading file" $tarfile >>$ofile ; echo "Please re-launch the script!" >>$ofile 
+			echo "Error downloading file" $tarfile; echo "Please re-launch the script!"
+			exit
+		    fi
 		else 
 		    echo "Could not find url " $file
 		fi
@@ -69,6 +75,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    echo "           untar-ring data " >> $ofile
 	    if [ ! -d $fold ] && [ ! -f $fold\_pass2D.fastq ] ; then # untar if not done already
 		tar -xvzf $tarfile  > /dev/null 2>>$ofile 
+
+		if [[ "$?" != 0 ]]; then
+		    echo "Error un-tarring file" $tarfile >>$ofile ; 
+		    echo "Error un-tarring file" $tarfile; 
+		fi
+
+
 	    fi
 	    
 	    if [ ! -f $fold\_pass2D.fastq ]; then  # extract fastq from fast5, if not done already
@@ -86,7 +99,6 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		    poretools fastq --type 2D $fast5pass > $fold\_pass2D.fastq  2>>$ofile
 		    if [ $strain == "s288c" ]; then
 		    	poretools fastq --type 2D $fast5fail > $fold\_fail2D.fastq 2>>$ofile
-
 		    fi
 		else
 		    echo no fast5 found! $fast5pass
@@ -190,7 +202,14 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 		    if [[ $ii == 0 ]]; then echo "           downloading " $tarfile; fi
 		    if [[ `wget -S --spider $tarfile 2>&1  | grep exists` ]]; then
-			wget $tarfile > /dev/null 2>>$ofile  
+			wget  -nv -c $tarfile > /dev/null #2>>$ofile  
+			
+			if [[ "$?" != 0 ]]; then
+			    echo "Error downloading file" $tarfile >>$ofile; echo "Please re-launch the script!">>$ofile
+			    echo "Error downloading file" $tarfile; echo "Please re-launch the script!"
+			    exit
+			fi
+
 		    else 
 			echo "Could not find url " $tarfile &> prepdata_output.txt
 		    fi
@@ -204,7 +223,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    for file in *.bas.h5; do
                 echo "           extracting fastqs using bash5tools.py" $file >> $ofile
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
-		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file  &>> prepdata_output.txt
+		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file   &>>$ofile 
 		fi
 	    done
 	done  ## runs
@@ -220,7 +239,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
 	    echo "           recreating pacbio s288c subsample 31X ONT-Emu"  
             echo "           recreating pacbio s288c subsample 31X ONT-Emu"  >> $ofile
-	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt
+	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt &>>$ofile 
 	fi
 	
     fi ## if ! global fastq file 
@@ -259,7 +278,14 @@ for strain in "${strains[@]}"; do
 	file=$miseqftp/$cramfile
 	if [ ! -f $strain\_1.fastq ]; then
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	wget $file > /dev/null 2>>$ofile  
+	    	wget  -nv -c $file > /dev/null #2>>$ofile  
+
+		if [[ "$?" != 0 ]]; then
+		    echo "Error downloading file" $tarfile >>$ofile ; echo "Please re-launch the script!" >>$ofile  
+		    echo "Error downloading file" $tarfile;  echo "Please re-launch the script!"
+		    exit
+		fi
+
 		$thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $cramfile > /dev/null 2>>$ofile  
 		rm $cramfile
 	    else 
