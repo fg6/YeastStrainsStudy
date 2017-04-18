@@ -42,6 +42,11 @@ for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
 
+    ofile=$folder/$strain/prepdata.txt
+    echo >> $ofile
+    date >> $ofile
+    echo "   preparing ONT data for " $strain >> $ofile
+
 
     echo "   preparing ONT data for " $strain
     if [ ! -f $strain\_pass2D.fastq ]; then   ##  if fastq file is not there already
@@ -52,21 +57,22 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    file=$ontftp/$tarfile
 	    fold=$(basename "$tarfile" .tar.gz)
 	    
+	    echo "           downloading" $tarfile >> $ofile
 	    if [ ! -f $tarfile ] && [ ! -f $fold\_pass2D.fastq ] ; then  # download if file is not there already
 		if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	    wget $ontftp/$tarfile &> /dev/null
+	    	    wget $ontftp/$tarfile > /dev/null 2>>$ofile 
 		else 
 		    echo "Could not find url " $file
 		fi
 	    fi
 
-	    echo "           untar data "
+	    echo "           untar-ring data " >> $ofile
 	    if [ ! -d $fold ] && [ ! -f $fold\_pass2D.fastq ] ; then # untar if not done already
-		tar -xvzf $tarfile  &> /dev/null
+		tar -xvzf $tarfile  > /dev/null 2>>$ofile 
 	    fi
 	    
 	    if [ ! -f $fold\_pass2D.fastq ]; then  # extract fastq from fast5, if not done already
-		echo "           creating fastqs "
+		echo "           creating fastqs " >> $ofile
 	    
 		fast5pass=$fold/reads/downloads/pass
 		fast5fail=$fold/reads/downloads/fail
@@ -77,9 +83,10 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		    nfiles=`ls $fast5pass | wc -l`
 		fi
 		if [ $nfiles -gt 0 ]; then
-		    poretools fastq --type 2D $fast5pass > $fold\_pass2D.fastq
+		    poretools fastq --type 2D $fast5pass > $fold\_pass2D.fastq  2>>$ofile
 		    if [ $strain == "s288c" ]; then
-		    	poretools fastq --type 2D $fast5fail > $fold\_fail2D.fastq
+		    	poretools fastq --type 2D $fast5fail > $fold\_fail2D.fastq 2>>$ofile
+
 		    fi
 		else
 		    echo no fast5 found! $fast5pass
@@ -96,18 +103,22 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	fi
 	
 	if [ $fqs -eq 0 ]; then  
-	    echo; echo " Error! no ONT fastqs found or creaed"  $strain
+	    echo; echo " Error! no ONT fastqs found or created"  $strain
 	else
-	    echo "           merging fastqs "
-	    
+	    echo "           merging fastqs " >> $ofile
+            echo "           merging fastqs "
+ 
 	    for f in *_pass2D.fastq; do 
 		cat $f >> $strain\_pass2D.fastq
 	    done 
 	    chmod -w $strain\_pass2D.fastq
 
 	    if [ $strain == "s288c" ]; then
+                echo "          creating fastq for all2D " >> $ofile
+
 	        cp $strain\_pass2D.fastq $strain\_all2D.fastq
                 chmod +w $strain\_all2D.fastq	
+		
 		for f in *fail2D.fastq; do 
 		    cat $f >> $strain\_all2D.fastq
 		done
@@ -159,6 +170,12 @@ for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
 
+    ofile=$folder/$strain/prepdata.txt
+    echo >> $ofile
+    date >> $ofile
+    echo "   preparing PacBio data for " $strain >> $ofile
+
+
     echo "   preparing PacBio data for " $strain
    
     if [ ! -f $strain\_pacbio.fastq ]; then  ##  if fastq file is not there already
@@ -169,9 +186,11 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    thislist=pb$strain\_${run}[@]
 	    for tarfile  in "${!thislist}"; do # loop over pacbio runs
 		if [ ! -f $(basename $tarfile) ]; then  # download if file is not there already
+	            echo "           downloading" $tarfile >> $ofile
+
 		    if [[ $ii == 0 ]]; then echo "           downloading " $tarfile; fi
 		    if [[ `wget -S --spider $tarfile 2>&1  | grep exists` ]]; then
-			wget $tarfile  &> /dev/null
+			wget $tarfile > /dev/null 2>>$ofile  
 		    else 
 			echo "Could not find url " $tarfile &> prepdata_output.txt
 		    fi
@@ -183,7 +202,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    # files are downloaded, now extract fastq 	    
 	    echo "           extracting fastqs"
 	    for file in *.bas.h5; do
-		echo $file
+                echo "           extracting fastqs using bash5tools.py" $file >> $ofile
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
 		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file  &>> prepdata_output.txt
 		fi
@@ -191,13 +210,16 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	done  ## runs
 
 	# fastq per run ready: now merge them in a single file
+        echo "           merging fastqs " >> $ofile
+        echo "           merging fastqs " 
 	for f in *.fastq; do 
 	    cat $f >> $strain\_pacbio.fastq
 	done 
 	chmod -w $strain\_pacbio.fastq
 
 	if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
-	    echo "           recreating pacbio s288c subsample 31X ONT-Emu"
+	    echo "           recreating pacbio s288c subsample 31X ONT-Emu"  
+            echo "           recreating pacbio s288c subsample 31X ONT-Emu"  >> $ofile
 	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt
 	fi
 	
@@ -237,8 +259,8 @@ for strain in "${strains[@]}"; do
 	file=$miseqftp/$cramfile
 	if [ ! -f $strain\_1.fastq ]; then
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-	    	wget $file  &> /dev/null
-		$thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $cramfile &>/dev/null
+	    	wget $file > /dev/null 2>>$ofile  
+		$thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $cramfile > /dev/null 2>>$ofile  
 		rm $cramfile
 	    else 
 		echo "Could not find url " $file
