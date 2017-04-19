@@ -47,11 +47,17 @@ for strain in "${strains[@]}"; do   ## loop on strains
     date >> $ofile
     echo "   preparing ONT data for " $strain >> $ofile
 
+    rerun=0
+    if [ ! -f $strain\_pass2D.fastq ]; then rerun=1;
+    elif [ $strain == "s288c" ] && [ ! -f $strain\_all2D.fastq ]; then rerun=1; 
+    fi
 
-    echo "   preparing ONT data for " $strain
-    if [ ! -f $strain\_pass2D.fastq ]; then   ##  if fastq file is not there already
+
+    echo "   preparing ONT data for " $strain $rerun    
+    if [ $rerun -eq 1 ]; then   ##  if fastq file is not there already
 
 	echo "           downloading data "
+	
 	thislist=ont${strain}[@]
 	for tarfile  in "${!thislist}"; do   # loop over ont runs
 	    file=$ontftp/$tarfile
@@ -189,8 +195,14 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
     echo "   preparing PacBio data for " $strain
-   
-    if [ ! -f $strain\_pacbio.fastq ]; then  ##  if fastq file is not there already
+  
+    rerun=0
+    if [ ! -f $strain\_pacbio.fastq ]; then rerun=1;
+    elif [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ]; then rerun=1;
+    fi
+
+ 
+    if [ $rerun -eq 1 ]; then  ##  if fastq file is not there already
 
 	runs=pb${strain}[@]
 	for run in "${!runs}"; do   ## loop over pacbio runs
@@ -231,9 +243,12 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	# fastq per run ready: now merge them in a single file
         echo "           merging fastqs " >> $ofile
         echo "           merging fastqs " 
-	for f in *.fastq; do 
-	    cat $f >> $strain\_pacbio.fastq
-	done 
+
+	if [ ! -f $strain\_pacbio.fastq ]; then 
+	    for f in *.fastq; do 
+	        cat $f >> $strain\_pacbio.fastq
+	    done
+     	fi 
 	chmod -w $strain\_pacbio.fastq
 
 	if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
@@ -276,7 +291,7 @@ for strain in "${strains[@]}"; do
    
     for cramfile in "${!thislist}"; do
 	file=$miseqftp/$cramfile
-	if [ ! -f $strain\_1.fastq ]; then
+	if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ] ; then
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
 	    	wget  -nv -c $file > /dev/null #2>>$ofile  
 
