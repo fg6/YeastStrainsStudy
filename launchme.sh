@@ -61,7 +61,15 @@ if [ $whattodo == "check" ]; then
   echo; echo " Checking fastq files..." 
   ###################################################
         cd $thisdir
-        $thisdir/utils/docheck.sh $singlestrain 0
+        $thisdir/utils/docheck.sh $singlestrain
+fi
+
+if [ $whattodo == "deepcheck" ]; then
+  ###################################################
+  echo; echo " Checking fastq files..." 
+  ###################################################
+        cd $thisdir
+        $thisdir/utils/deepcheck.sh $singlestrain 
 fi
 
 
