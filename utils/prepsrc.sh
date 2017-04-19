@@ -96,4 +96,8 @@ if [ ! -d  $thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-et
      rm biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu.tar.gz
 fi
 
+if [ ! -f $thisdir/utils/src/pacbiosub/pacbiosub ]; then
+	cd $thisdir/utils/src/pacbiosub/
+	make
+fi
 
