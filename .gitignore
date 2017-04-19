@@ -1,0 +1,12 @@
+fastqs/
+pipelines/results/
+utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/
+utils/src/fq2fa/
+utils/src/locpy/
+utils/src/n50/
+utils/src/pacbiosub/pacbiosub
+utils/src/pbh5tools/
+utils/src/poretools/
+utils/src/random_subreads/
+utils/src/smis/
+
