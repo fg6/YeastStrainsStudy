@@ -17,11 +17,7 @@ fi
 
 
 if [[ ${singlestrain} == "" ]]; then
-	strains=( s288c )
-elif [[ $singlestrain != "all" ]]; then
-    strains=( $singlestrain )
-else
-    strains=( s288c sk1 cbs n44 )
+	singlestrain=s288c
 fi
 
 
