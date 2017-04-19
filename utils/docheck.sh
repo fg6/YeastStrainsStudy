@@ -17,7 +17,7 @@ platforms=( ont pacbio miseq )
 
 #pass2D, all2D
 ont_s288c=( e224e33eb558d0df946f2ef8ad72a9f8 eef848b246c4c60f1365a7ca420fe3a3 )
-ont_sk1=( )
+ont_sk1=( 6fd6924adde618cd8be956cf59bd4aac )
 ont_cbs=( )
 ont_n44=( )
 #whole, 31X_ont_emu

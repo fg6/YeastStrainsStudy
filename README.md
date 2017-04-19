@@ -42,7 +42,7 @@ If everything looks ok, you can clean up the data folders, deleting every interm
 
 #### Disk space required:
 
-If not cleaning up (clean=0): Total: 1.5TB
+If not cleaning up (clean=0): Total: ONT=1.6TB
 
 After cleaning (clean=1):  Total: < 30GB.
 
