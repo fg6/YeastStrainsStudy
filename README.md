@@ -7,7 +7,7 @@ Download repository:
 	git clone https://github.com/fg6/YeastStrainsStudy.git
 
 
-### Download data and needed utilities #####
+### Download data and utilities #####
 
 To download and prepare the data and install the needed scripts and codes use the launchme.sh script:
 
@@ -18,23 +18,25 @@ Usage:
   	  strain: Download data for this strain/s, only for command=download or check 
 		  Options: s288c,sk1,cbs,n44,all [s288c]
 
-Download and install needed codes and scripts:
+Step 1. Download and install needed codes and scripts:
 	
 	$ ./launchme.sh install
 	
-Download data and prepare the fastq files: 
+Step 2. Download data and prepare the fastq files: 
 
 	$ ./launchme.sh download <strain> 
  
 	strain= s288c, sk1, n44, cbs or all  [s288c]
 
-Once the data have been downloaded and the fastq files prepared, check the fastq files:
+Step 3. Once the data have been downloaded and the fastq files prepared, check the fastq files:
 
 	$ ./launchme.sh check <strain> 
 
         strain= s288c, sk1, n44, cbs or all  [s288c]
 
-If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
+	If the check give you warnings, probably some file failed to download properly, follow the instructions given in the output
+
+Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
 
         $ ./launchme.sh clean <strain>
 
@@ -42,6 +44,7 @@ If everything looks ok and there are no warnings, you can clean up the data fold
 		if you clean data for the s288c strain, you will not be able to run Nanopolish until 
 		you download again the fast5 data with ./launchme.sh download s288c. 
 		It is ok to clean up the other strain data, as Nanopolish is only run on s288c.
+
 
 #### Disk space required:
 
