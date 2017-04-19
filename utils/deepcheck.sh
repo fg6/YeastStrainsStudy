@@ -59,7 +59,7 @@ for file in "${files[@]}"; do
     ls $thisdir/$file
 
     if [ ! -f $thisdir/$file ]; then
-	thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
+	thischeck=`$thisdir/utils/src/n50/n50 $thisdir/$file | awk '{print $2}'`
 
 	if [ "${!check}" = "$thischeck" ]; then echo "    " $file  OK;
 	    else 
