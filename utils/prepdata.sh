@@ -211,7 +211,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 			fi
 
 		    else 
-			echo "Could not find url " $tarfile &> prepdata_output.txt
+			echo "Could not find url " $tarfile &>> $ofile 
 		    fi
 		fi
 	    done  # download each file in a run
