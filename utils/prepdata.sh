@@ -154,7 +154,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		ontclean=0
 		reallyclean=0
 		echo "           Warning: if you delete the fast5 files you will not be able to run nanopolish!"
-		echo "           are you sure you want to clean up the fast5 files? [yes,y or no,n] "
+		echo "           are you sure you want to clean up the fast5 files? [yes,y or no,n] (\'no\' will not delete the s288c fast5, but the script will continue to clean up the rest of the data)"
 		read reallyclean
 		if [ $reallyclean == "y" ] || [ $reallyclean == "yes" ]; then
 		    ontclean=1
