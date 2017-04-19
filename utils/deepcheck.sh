@@ -58,7 +58,7 @@ for file in "${files[@]}"; do
 
     ls $thisdir/$file
 
-    if [ ! -f $thisdir/$file ]; then
+    if [ -f $thisdir/$file ]; then
 	thischeck=`$thisdir/utils/src/n50/n50 $thisdir/$file | awk '{print $2}'`
 
 	if [ "${!check}" = "$thischeck" ]; then echo "    " $file  OK;
@@ -73,12 +73,12 @@ for file in "${files[@]}"; do
 
 		#errors=$(($errors+1))
 	    fi
-	else
-            echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
-	    echo "     Cannot find fastq file for" $strain: $file ;
-	    echo "          Download it with: "  $ ./launchme.sh download $strain 
+    else
+        echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+	echo "     Cannot find fastq file for" $strain: $file ;
+	echo "          Download it with: "  $ ./launchme.sh download $strain 
 	    #missing=$(($missing+1))
-	fi
+    fi
 
 
 done
