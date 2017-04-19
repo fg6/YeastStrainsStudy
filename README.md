@@ -42,9 +42,11 @@ If everything looks ok and there are no warnings, you can clean up the data fold
 
 #### Disk space required:
 
-If not cleaning up (clean=0): Total: ONT=1.6TB
+If not cleaning up (clean=0):  1.7TB 
 
-After cleaning (clean=1):  Total: < 30GB.
+After cleaning all (clean=1):  < 30GB.
+
+After cleaning all except s288c (to run Nanopolish): ~700GB 
 
 #### Requirements for installing and preparing data:
 A python version >= 2.7 is needed. Please 
