@@ -33,7 +33,6 @@ miseq_n44=( 504046656 504046656 )
 ontn=( pass2D all2D )
 pacbion=( pacbio pacbio_ontemu_31X )
 
-
 if [ ! -f  $thisdir/utils/src/n50/n50 ] ; then
     echo Some utilities are missing, please run ./install.sh
     exit
@@ -42,12 +41,12 @@ fi
 
 for platform in "${platforms[@]}"; do  
 
-    echo  " " Checking fastq files for $platform ...
+    echo; echo  " " Checking fastq files for $platform ...
     folder=fastqs/$platform
-    if [ $platform != "miseq" ]; then name=${platform}n[0]; fi
 
     for strain in "${strains[@]}"; do   
-
+        echo  "   "strain= $strain
+	if [ $platform != "miseq" ]; then name=${platform}n[0]; fi
 	file=$folder/$strain/$strain\_"${!name}".fastq
 	if [ $platform == "miseq" ]; then 
 	    file=$folder/$strain\_1.fastq; 
@@ -58,7 +57,7 @@ for platform in "${platforms[@]}"; do
 	    check=$platform\_${strain}
 	    thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
 
-	    if [ "${!check}" = "$thischeck" ]; then echo "  " $thistrain $file  OK;
+	    if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file  OK;
 	    else echo "  Warning !!! " $thistrain $file  not OK !!!;  fi
 	else
 	    echo "    Cannot find fastq file for" $strain: $file ;
@@ -70,7 +69,7 @@ for platform in "${platforms[@]}"; do
 		check=$platform\_${strain}[1]
 		thischeck=`$thisdir/utils/src/n50/n50 $file2 | awk '{print $2}'`
 		
-		if [ "${!check}" = "$thischeck" ]; then echo "  " $thistrain $file2  OK;
+		if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file2  OK;
 		else echo "  Warning !!! " $thistrain $file2  not OK !!!;  fi
 
 	    else
@@ -86,7 +85,7 @@ for platform in "${platforms[@]}"; do
 	    if [ -f $file ]; then 
 		check=$platform\_${strain}[1]
 		thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
-		if [ "${!check}" = "$thischeck" ]; then echo "  " $thistrain $file  OK;
+		if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file  OK;
 		else echo "  Warning !!! " $thistrain $file  not OK !!!;  fi
 	    else
 		echo "    Cannot find fastq file for" $strain\: $file ;
