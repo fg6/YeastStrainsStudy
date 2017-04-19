@@ -219,7 +219,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 	    
 	    # files are downloaded, now extract fastq 	    
-	    echo "           extracting fastqs"
+	    #echo "           extracting fastqs"
 	    for file in *.bas.h5; do
                 echo "           extracting fastqs using bash5tools.py" $file >> $ofile
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
