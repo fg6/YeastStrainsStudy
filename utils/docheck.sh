@@ -58,10 +58,18 @@ for platform in "${platforms[@]}"; do
 	    thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
 
 	    if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file  OK;
-	    else echo "  Warning !!! " $thistrain $file  not OK !!!;  fi
+	    else 
+		echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+		echo "     !!!! " $thistrain $file  NOT OK ;  
+		echo "     !!!!    Something must have gone wrong during the fastq preparation "
+		echo "     !!!!    Please "; 
+		echo "     !!!!       1. remove the fastq file: $ rm -f " $file
+		echo "     !!!!       2. relaunch: $ ./launchme.sh"  $strain 0
+		echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+	    fi
 	else
 	    echo "    Cannot find fastq file for" $strain: $file ;
-	    echo "      Run:  \"$ ./launchme.sh"  $strain\" to download the data 
+	    echo "      Download the data with: "  $ ./launchme.sh $strain 0
 	fi
 
 	if [ $platform == "miseq" ]; then 
@@ -70,11 +78,18 @@ for platform in "${platforms[@]}"; do
 		thischeck=`$thisdir/utils/src/n50/n50 $file2 | awk '{print $2}'`
 		
 		if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file2  OK;
-		else echo "  Warning !!! " $thistrain $file2  not OK !!!;  fi
-
+		else 
+		    echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+		    echo "     !!!! " $thistrain $file  NOT OK ;  
+		    echo "     !!!!    Something must have gone wrong during the fastq preparation "
+		    echo "     !!!!    Please "; 
+		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
+		    echo "     !!!!       2. relaunch: $ ./launchme.sh"  $strain 0
+		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+		fi
 	    else
 		echo "    Cannot find fastq file for" $strain\: $file2 ;
-		echo "      Run:  \"$ ./launchme.sh"  $strain\" to download the data 
+		echo "      Download the data with: "  $ ./launchme.sh $strain 0
 	    fi
 	fi
 	
@@ -86,10 +101,18 @@ for platform in "${platforms[@]}"; do
 		check=$platform\_${strain}[1]
 		thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
 		if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file  OK;
-		else echo "  Warning !!! " $thistrain $file  not OK !!!;  fi
+		else 
+		    echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+		    echo "     !!!! " $thistrain $file  NOT OK ;  
+		    echo "     !!!!    Something must have gone wrong during the fastq preparation "
+		    echo "     !!!!    Please "; 
+		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
+		    echo "     !!!!       2. relaunch: $ ./launchme.sh"  $strain 0
+		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+		fi
 	    else
 		echo "    Cannot find fastq file for" $strain\: $file ;
-		echo "      Run:  \"$ ./launchme.sh"  $strain\" to download the data 
+		echo "      Download the data with: "  $ ./launchme.sh $strain 0
 	    fi
 	fi
     done
