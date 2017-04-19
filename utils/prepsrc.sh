@@ -80,6 +80,18 @@ if [ ! -d  $thisdir/utils/src/fq2fa ] ; then
     cd fq2fa
     make &> install_output.txt
 fi
+
+
+if [ ! -d  $thisdir/utils/src/n50 ] ; then
+    echo " Downloading and installing n50..."
+    ## calculate fasta/fastq stats
+    cd $thisdir/utils/src
+    git clone -b nogzstream https://github.com/fg6/n50.git  &> /dev/null
+    cd n50
+    make &> install_output.txt
+fi
+
+
 	
 if [ ! -d  $thisdir/utils/src/random_subreads ] ; then
     echo " Downloading and installing random_subreads..."
