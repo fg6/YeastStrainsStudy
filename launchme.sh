@@ -22,32 +22,32 @@ fi
 
 
 
-
-
-##########################################
-####### download some utilities ##########
-##########################################
 if [ $whattodo == "install" ]; then
-	echo; echo " Downloading and install some utilities..."
+  ###################################################
+  echo; echo " Downloading and installing some utilities..."
+  ###################################################
+
 	$thisdir/utils/prepsrc.sh
 	echo "                 ... all srcs ready!"
 fi
 
 
-###################################################
-  echo; echo " Downloading and preparing data..."
-###################################################
+
 if [ $whattodo == "download" ]; then
+  ###################################################
+  echo; echo " Downloading and preparing data..."
+  ###################################################
 	cd $thisdir
 	$thisdir/utils/prepdata.sh $singlestrain 0
 	echo "                 ... requested data ready!"
 fi
 
 
-###################################################
-  echo; echo " Downloading and preparing data..."
-###################################################
 if [ $whattodo == "clean" ]; then
+  ###################################################
+  echo; echo " Cleaning data..."
+  ###################################################
+
         cd $thisdir
         $thisdir/utils/prepdata.sh $singlestrain 1
         echo "                 ... cleaned data!"
@@ -55,11 +55,10 @@ fi
 
 
 
-### add check for fastqs
-###################################################
-  echo; echo " Downloading and preparing data..."
-###################################################
 if [ $whattodo == "check" ]; then
+  ###################################################
+  echo; echo " Downloading and preparing data..."
+  ###################################################
         cd $thisdir
         $thisdir/utils/docheck.sh $singlestrain 0
 fi
