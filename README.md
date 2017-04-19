@@ -36,7 +36,7 @@ Usage:
 
 	If the check give you warnings, probably some file failed to download properly, follow the instructions given in the output
 
-Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
+##### Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
 
         $ ./launchme.sh clean <strain>
 
@@ -46,7 +46,7 @@ Step 4. If everything looks ok and there are no warnings, you can clean up the d
 		It is ok to clean up the other strain data, as Nanopolish is only run on s288c.
 
 
-#### Disk space required:
+##### Disk space required:
 
 If not cleaning up (clean=0):  1.7TB 
 
@@ -54,7 +54,7 @@ After cleaning all (clean=1):  < 30GB.
 
 After cleaning all except s288c (to run Nanopolish): ~700GB 
 
-#### Requirements for installing and preparing data:
+##### Requirements for installing and preparing data:
 A python version >= 2.7 is needed. Please 
 make sure this is available in your PATH, 
 together with virtualenv.
