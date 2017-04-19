@@ -2,42 +2,45 @@
 Scripts to run pipeline for paper [ref-needed]
 
 ## Instructions #####
+Download repository: 
+
+	git clone https://github.com/fg6/YeastStrainsStudy.git
 
 
 ### Download data and needed utilities #####
-Download and install  needed codes and scripts with install.sh:
+
+To download and prepare the data and install the needed scripts and codes use the launchme.sh script:
+
+Usage: 
+	launchme.sh <command> <strain>
+	  command: command to be run. Options: install,download,check,clean
+  	  strain: Download data for this strain/s, only for command=download or check [s288c]. Options: s288c,sk1,cbs,n44,all
+		  You can download data and prepare fastq files for all the strains at once ('all' option)
+	          or in subsequent steps, launching 'launchme.sh strain'  subsequently.
+
+Download and install needed codes and scripts:
 	
-	$ ./install.sh
+	$ ./launchme.sh install
 	
-Afterwards, download data and prepare fastq files with the launchme.sh script.
+Download data and prepare the fastq files: 
 
-	$  ./launchme.sh <strain> <clean> 
-	strain= s288c, sk1, n44, cbs or all  
-		You can download data and prepare fastq files for all the strains at once ('all' option) 
-	    	or in subsequent steps, launching 'launchme.sh strain'  subsequently. 
+	$  ./launchme.sh download <strain> 
+ 
+	strain= s288c, sk1, n44, cbs or all  [s288c]
 
-	clean=  if 1 will clean up all the intermediate files from which the fastqs have been extracted.
-	       	clean=1 will try to delete the original ONT fast5 files from which the ONT fastq files are extracted.
-	       	Warning! Deleting the fast5 files for the s288c strain (~630GB)  will prevent you to run the nanopolish pipeline:
-		if you decide later to run nanopolish, you will need to re-download the fast5 files..
+Once the data have been downloaded and the fastq files prepared, check the fastq files:
 
-	example: $  ./launchme.sh s288c 0
+	$ ./launchme.sh check <strain> 
 
-Once the data have been downloaded and the fastq files prepared, check the fastq files checksums:
-
-	$ ./utils/docheck.sh <strain> 
-
-        strain= s288c, sk1, n44, cbs or all
-                You can check the fastq files for all the strains at once ('all' option)
-                or in subsequent steps
+        strain= s288c, sk1, n44, cbs or all  [s288c]
 
 If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
 
-        example: $  ./launchme.sh <strain> 1
+        example: $  ./launchme.sh clean <strain>
 
 	Warning!! please notice that to run Nanopolish the original fast5 folders are needed for s288c, if you clean
 		data for the s288c strain, you will not be able to run Nanopolish until you have redownloaded the
-		data with ./launchme.sh s288c 0. It is ok to clean up the other strain data.
+		data with ./launchme.sh download s288c . It is ok to clean up the other strain data.
 
 
 #### Disk space required:
