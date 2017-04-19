@@ -18,17 +18,17 @@ Usage:
   	  strain: Download data for this strain/s, only for command=download or check 
 		  Options: s288c,sk1,cbs,n44,all [s288c]
 
-Step 1. Download and install needed codes and scripts:
+###### Step 1. Download and install needed codes and scripts:
 	
 	$ ./launchme.sh install
 	
-Step 2. Download data and prepare the fastq files: 
+##### Step 2. Download data and prepare the fastq files: 
 
 	$ ./launchme.sh download <strain> 
  
 	strain= s288c, sk1, n44, cbs or all  [s288c]
 
-Step 3. Once the data have been downloaded and the fastq files prepared, check the fastq files:
+#### Step 3. Once the data have been downloaded and the fastq files prepared, check the fastq files:
 
 	$ ./launchme.sh check <strain> 
 
