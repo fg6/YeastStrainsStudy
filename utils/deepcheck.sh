@@ -56,9 +56,9 @@ for file in "${files[@]}"; do
 
     check=bases[$ii]
 
-    ls $file
+    ls $thisdir/$file
 
-    if [ ! -f $file ]; then
+    if [ ! -f $thisdir/$file ]; then
 	thischeck=`$thisdir/utils/src/n50/n50 $file | awk '{print $2}'`
 
 	if [ "${!check}" = "$thischeck" ]; then echo "    " $file  OK;
