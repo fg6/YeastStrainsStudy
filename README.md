@@ -31,11 +31,11 @@ Once the data have been downloaded and the fastq files prepared, check the fastq
                 You can check the fastq files for all the strains at once ('all' option)
                 or in subsequent steps
 
-If everything looks ok, you can clean up the data folders, deleting every intermediate files and folders:
+If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
 
         example: $  ./launchme.sh <strain> 1
 
-	Warning!! please notice that to run Nanopolish the original fast5 folders are needed, if you clean
+	Warning!! please notice that to run Nanopolish the original fast5 folders are needed for s288c, if you clean
 		data for the s288c strain, you will not be able to run Nanopolish until you have redownloaded the
 		data with ./launchme.sh s288c 0. It is ok to clean up the other strain data.
 
@@ -47,8 +47,9 @@ If not cleaning up (clean=0): Total: ONT=1.6TB
 After cleaning (clean=1):  Total: < 30GB.
 
 #### Requirements for installing and preparing data:
-To install 'poretools' a python version >= 2.7 is needed. Please 
-make sure this is available in your PATH, together with virtualenv.
+A python version >= 2.7 is needed. Please 
+make sure this is available in your PATH, 
+together with virtualenv.
 
 
 
