@@ -57,7 +57,7 @@ fi
 
 if [ $whattodo == "check" ]; then
   ###################################################
-  echo; echo " Downloading and preparing data..."
+  echo; echo " Checking fastq files..." 
   ###################################################
         cd $thisdir
         $thisdir/utils/docheck.sh $singlestrain 0
