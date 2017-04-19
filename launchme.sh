@@ -11,7 +11,8 @@ singlestrain=$2
 if [ $# -lt 1 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<command\> \<strain\>  
     echo "  command: command to be run. Options: install,download,check,clean"
-    echo "  strain: Download data for this strain/s, only for command=download or check [s288c]. Options: s288c,sk1,cbs,n44,all"
+    echo "  strain: Download data for this strain/s, only for command=download or check."
+    echo "          Options: s288c,sk1,cbs,n44,all"
     exit
 fi
 
