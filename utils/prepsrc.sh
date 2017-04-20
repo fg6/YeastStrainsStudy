@@ -52,6 +52,7 @@ if [ ! -f locpy/bin/activate ]; then
     pip install panda &>>   $thisdir/utils/src/locpy/install_output.txt
     pip install matplotlib &>>   $thisdir/utils/src/locpy/install_output.txt
     pip install seaborn &>>   $thisdir/utils/src/locpy/install_output.txt
+    pip install pbcore &>>   $thisdir/utils/src/locpy/install_output.txt
     deactivate   
 fi
 

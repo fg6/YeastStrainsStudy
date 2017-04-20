@@ -9,6 +9,9 @@ force=$3
 
 
 
+source $thisdir/utils/src/locpy/bin/activate
+
+
 if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<strain\> 
     echo "  strain: Download data for this strain [s288c] (s288c,sk1,cbs,n44,all,none)"
@@ -25,22 +28,28 @@ fi
 
 
 
-if  [[ $force ==  "" ]]; then
+if  [[ $force == "" ]] || [[ $force == 'none' ]]; then
+    forceont=0
+    forcepacbio=0
     forcereload=0
     forceone=0
 elif [[ $force == 'all' ]]; then
     forcereload=1
-    forceone=0
-elif [[ $force == 'none' ]]; then
-    forcereload=0
+    forceont=0
+    forcepacbio=0
     forceone=0
 else
     forcereload=0
     forceone=$force
+
+    if [[ $forceone == m1* ]]; then 
+        forcepacbio=1
+	forceont=0
+    else
+        forcepacbio=0
+	forceont=1
+    fi
 fi
-
-
-
 
 
 # get name and location of data
@@ -60,10 +69,7 @@ folder=$thisdir/fastqs/ont
 mkdir -p $folder
 cd $folder
 
-
-
-
-
+strains=()  #canc
 for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
@@ -80,6 +86,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
     echo "   preparing ONT data for " $strain $rerun    
+    error=0
     if [[ $rerun == 1  ||  $forcereload == 1  ||  $forceone != '0' ]] ; then   ##  if fastq file is not there already
 
 	echo "           downloading data "
@@ -93,7 +100,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
 	    forcethis=0
-  	    if [ $forceone != '0' ] && [ $forceone == $(basename $tarfile ) ]; then 
+  	    if [ $forceont == 1 ] && [ $forceone == $(basename $tarfile ) ]; then 
 		echo "           "Force reloading $tarfile
 	 	forcethis=1
 		# no need to delete the tar.gz, wget in principle should just restart from where it stopped. 
@@ -117,11 +124,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
                         	echo "Error downloading file" $tarfile; echo "Please re-launch the script!"   # maybe add deepcheck note?
 				rm -f $tarfile
 				# remove file otherwise download will not start again
+				error=$(($error+1))
 				exit
 			fi
 		    fi
 		else 
-		    echo "Could not find url " $file
+		    echo "      !!! Unexpected Error! Could not find url " $file 
+		    error=$(($error+1))
 		fi
 	    fi
 
@@ -138,32 +147,34 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		    echo "Error uncompressing file" $tarfile; 
 		    rm -rf $fold
   		    echo "Please re-launch the script!"
+		    error=$(($error+1))
 		fi
-
-
 	    fi
 	   
-           
-          
+            
 	    if [ ! -f $fold\_pass2D.fastq ]  ||  [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then  # extract fastq from fast5, if not done already
-                if [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then rm -f $fold\_pass2D.fastq $fold\_fail2D.fastq; fi
+                if [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then rm -f $fold\_pass2D.fastq $fold\_fail2D.fastq $strain\_pass2D.fastq $strain\_all2D.fastq; fi  # if one of the file is force reloaded, make sure the final fastq files are regenerated!
 		echo "           creating fastqs " >> $ofile
 	        
 		fast5pass=$fold/reads/downloads/pass
 		fast5fail=$fold/reads/downloads/fail
 		if ! ls $fast5pass  &> /dev/null; then
-		    echo "  " no fast5 found! $fast5pass
+		    echo; echo "           !!! Some Errors occurred in folder"  $fold
+		    echo "           please restart the script"
+		    echo "           If this does not help try debugging with:"
+		    echo "             $ ./launchme.sh check" $strain     or     "$ ./launchme.sh deepcheck" $strain; echo ;echo
 		    nfiles=0
+		    rm -rf $fold
+		    error=$(($error+1))
 		else
 		    nfiles=`ls $fast5pass | wc -l`
 		fi
+
 		if [ $nfiles -gt 0 ]; then
 		    poretools fastq --type 2D $fast5pass > $fold\_pass2D.fastq  2>>$ofile
 		    if [ $strain == "s288c" ]; then
 		    	poretools fastq --type 2D $fast5fail > $fold\_fail2D.fastq 2>>$ofile
 		    fi
-		else
-		    echo no fast5 found! $fast5pass
 		fi
 	    fi ## poretools
 	done # runs
@@ -176,14 +187,16 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    fqs=`ls *fastq | wc -l` 
 	fi
 	
-	if [ $fqs -eq 0 ]; then  
-	    echo; echo " Error! no ONT fastqs found or created"  $strain
+	if [ $fqs -eq 0 ] || [ $error -gt 0 ]; then  
+	    echo; echo "           !!! Some Errors! no ONT fastqs created. Please restart the script for "  $strain
+	    echo "           If this does not help try debugging with:"
+	    echo "             $ ./launchme.sh check" $strain     or     "$ ./launchme.sh deepcheck" $strain; echo ;echo
 	else
 	    echo "           merging fastqs " >> $ofile
             echo "           merging fastqs "
 
 
-             if [ $forcereload -eq 1 ]; then rm -f $strain\_pass2D.fastq $strain\_all2D.fastq; fi
+            if [ $forcereload -eq 1 ]; then rm -f $strain\_pass2D.fastq $strain\_all2D.fastq; fi
  
 	    for f in *_pass2D.fastq; do 
 		cat $f >> $strain\_pass2D.fastq
@@ -235,7 +248,8 @@ for strain in "${strains[@]}"; do   ## loop on strains
 done # strain
 
 
-
+strains=( $singlestrain )
+#canc
 #################################################
 #******************* PacBio ******************* #
 #################################################
@@ -252,28 +266,41 @@ for strain in "${strains[@]}"; do   ## loop on strains
     ofile=$folder/$strain/prepdata.txt
     echo >> $ofile
     date >> $ofile
-    echo "   preparing PacBio data for " $strain >> $ofile
+    echo "   preparing PacBio data for" $strain >> $ofile
 
 
-    echo "   preparing PacBio data for " $strain
-  
+    echo "   preparing PacBio data for" $strain
+    
     rerun=0
     if [ ! -f $strain\_pacbio.fastq ]; then rerun=1;
     elif [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ]; then rerun=1;
     fi
+    
+    toterror=0  
+    rerun=1 #canc
 
- 
-    if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ]; then  ##  if fastq file is not there already
+    if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ] || [ $forceone != '0' ]; then  ##  if fastq file is not there already or force reload
 
 	runs=pb${strain}[@]
+	
 	for run in "${!runs}"; do   ## loop over pacbio runs
 	    
+	    runerror=0    
 	    thislist=pb$strain\_${run}[@]
 	    for h5file  in "${!thislist}"; do # loop over pacbio runs
+	       
+		forcethis=0
+  		if [ $forcepacbio != '0' ]; then
+		    if [[ $(basename $h5file) == $forceone* ]]; then 
+			echo "           "Force reloading $h5file
+	 		forcethis=1
+			rm -f  $(basename $h5file .bas.h5).fastq $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq
+		    fi 	
+		fi
 
-		if [ ! -f $(basename $h5file) ] || [ $forcereload -eq 1 ]; then  # download if file is not there already
+		if [ ! -f $(basename $h5file) ] || [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then  # download if file is not there already
 	            echo "           downloading" $h5file >> $ofile	
-		
+		        
 		    if [[ $ii == 0 ]]; then echo "           downloading " $h5file; fi
 		    if [[ `wget -S --spider $h5file 2>&1  | grep exists` ]]; then
 			wget  -nv -c $h5file > /dev/null #2>>$ofile  
@@ -281,48 +308,79 @@ for strain in "${strains[@]}"; do   ## loop on strains
 			if [[ "$?" != 0 ]]; then
 			    echo "Error downloading file" $h5file >>$ofile; echo "Please re-launch the script!">>$ofile
 			    echo "Error downloading file" $h5file; echo "Please re-launch the script!"
+			    rm -f $(basename $h5file)
+			    toterror=$(($toterror+1))
+			    runerror=$(($runerror+1))
 			    exit
 			fi
 
 		    else 
-			echo "Could not find url " $h5file &>> $ofile 
+			echo "      !!! Unexpected Error! Could not find url " $h5file &>> $ofile 
+			echo "      !!! Unexpected Error! Could not find url " $h5file 
+			toterror=$(($toterror+1))
+			runerror=$(($runerror+1))
 		    fi
 		fi
 	    done  # download each file in a run
 
             if [ $forcereload -eq 1 ]; then rm -f *.fastq; fi
+	    
+	    if [[ $runerror == 0 ]]; then
+		which python
+		for file in *.bas.h5; do
+                    echo "           extracting fastqs using bash5tools.py" $file >> $ofile
+		    echo "           extracting fastqs using bash5tools.py" $file $(basename $file .bas.h5).fastq
+		    if [ ! -f $(basename $file .bas.h5).fastq ]; then
+			python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file  # &>>$ofile 
+		    fi
+		done
+	    fi
 
-	    for file in *.bas.h5; do
-                echo "           extracting fastqs using bash5tools.py" $file >> $ofile
-		if [ ! -f $(basename $file .bas.h5).fastq ]; then
-		    python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file   &>>$ofile 
-		fi
-	    done
+	    #echo rerunning $run #canc
+	    #echo "${!runs}" #canc
+
+
 	done  ## runs
 
-	# fastq per run ready: now merge them in a single file
-        echo "           merging fastqs " >> $ofile
-        echo "           merging fastqs " 
 
-        if [ $forcereload -eq 1 ]; then rm -f $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq; fi
+	echo $toterror
 
-	if [ ! -f $strain\_pacbio.fastq ]; then 
+
+	if [[ $toterror == 0 ]]; then
+	    # fastq per run ready: now merge them in a single file
+            echo "           merging fastqs " >> $ofile
+            echo "           merging fastqs " 
+	    
+            if [ $forcereload -eq 1 ]; then 
+		rm -f $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq; 
+	    fi
+
 	    for f in *.fastq; do 
-	        cat $f >> $strain\_pacbio.fastq
+		echo $f
 	    done
-     	fi 
-	chmod -w $strain\_pacbio.fastq
 
-	if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
-	    echo "           recreating pacbio s288c subsample 31X ONT-Emu"  
-            echo "           recreating pacbio s288c subsample 31X ONT-Emu"  >> $ofile
-	    $thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt &>>$ofile 
-	fi
+	    if [ ! -f $strain\_pacbio.fastq ]; then 
+		for f in *.fastq; do 
+	            cat $f >> $strain\_pacbio.fastq
+		done
+     	    fi 
+	    chmod -w $strain\_pacbio.fastq
+
+	    if [ $strain == "s288c" ] && [ ! -f s288c_pacbio_ontemu_31X.fastq ] ; then
+		echo "           recreating pacbio s288c subsample 31X ONT-Emu"  
+		echo "           recreating pacbio s288c subsample 31X ONT-Emu"  >> $ofile
+		$thisdir/utils/src/pacbiosub/pacbiosub $strain\_pacbio.fastq $thisdir/utils/src/pacbiosub/pacbio_31X_reads.txt &>>$ofile 
+	    fi
 	
+	else
+	    echo; echo "           !!! Some Errors! no PacBio fastqs created. Please restart the script for"  $strain
+	    echo "           If this does not help try debugging with:"
+	    echo "             $ ./launchme.sh check" $strain     or     "$ ./launchme.sh deepcheck" $strain; echo ;echo
+	fi
     fi ## if ! global fastq file 
     
    # if all successful: clean all except fastq files before starting next strain
-   if [ -f $strain\_pacbio.fastq ]; then 
+    if [ -f $strain\_pacbio.fastq ]; then 
 	notempty=`head -1 $strain\_pacbio.fastq | wc -l`
 	if [ $notempty -gt 0 ] && [ $clean -gt 0 ]; then
 	    dd=`ls -I "*fastq" | wc -l`
