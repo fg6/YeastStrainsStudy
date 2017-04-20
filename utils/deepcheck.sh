@@ -46,24 +46,72 @@ for platform in "${platforms[@]}"; do
 		    echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		    echo "     !!!! " $file  NOT OK ;  
 		    echo "     !!!!    Something went wrong during the fastq preparation "
-		    echo "     !!!!    Please "; 
-		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
-		    echo "     !!!!       2. relaunch: $ ./launchme.sh download "  $strain
 		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
 		    errors=$(($errors+1))
 
 
 		    if [ $platform == 'ont' ]; then
-		    
-			echo folder:
-			ls $(basename $file .fastq)
-			echo tar:
-			ls $(basename $file .fastq).tar.gz
+			rm -rf $file
 
+			thisfolder="${file%_*}"
+			thistar=$thisfolder.tar.gz
+			
 
-		    fi
+			folderok=0
+			if [ -d $thisfolder ]; then
+			    foldcheck=`du -sh $thisfolder | awk '{print $1}'`
+			    #ocheck=`grep $(basename $thisfolder) $thisdir/utils/f5folders.list | awk '{print $1}'`
+			    ocheck=12G #canc
+			    
+			    if [ $foldcheck != $ocheck ]; then 
+			    	folderok=0
+			    else
+				folderok=1
+			    fi
+			fi
+			
+			if [ $folderok -eq 0 ]; then # if folder not ok, check tar file 
+			    if [ -f $thistar ]; then
+				tarcheck=`du -sh $thistar | awk '{print $1}'`
+				ocheck=`grep $(basename $thistar) $thisdir/utils/tarfiles.list | awk '{print $1}'`
+				
+				#ocheck=$tarcheck #canc
+				if [ $tarcheck != $ocheck ]; then 
+				    echo; echo "     *** PROBLEM FOUND! ***"   
+				    echo "     The tar file $tarfile did not download properly:"
+				    echo "       Force redownload it with:"
+				    echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
+				else
+				    echo; echo "     *** PROBLEM FOUND! ***"   
+				    echo "     Uncompression of $thistar in $thisfolder failed"
+				    rm -rf $thisfolder  
+				    echo "     !!!!    Please relaunch: $ ./launchme.sh download "  $strain
+				    echo; echo "     If this does not help, try uncompressing manually:"
+				    echo "        $ rm -rf " $thisfolder; echo "        $ cd " "${file%/*}"; 
+				    echo "        $ tar -xvzf " $(basename $thistar)
+				    echo "        $ cd" $thisdir; echo "        $ ./launchme.sh download" $strain      
+				fi
+			    else
+				echo "     Cannot find tar.gz file for" $strain: $thistar ;
+				echo "     Force redownload it with:"
+				echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
+			    fi
+			    
+
+			else ## folder ok
+			    echo; echo "     *** NO PROBLEM FOUND IN EARLIER STEPS ***"   
+			    echo "     try to simply recreate the file:"
+			    echo "         $  ./launchme.sh download" $strain 
+			    
+			fi ## folder not ok?
+			
+			
+
+		    fi # platform
 
 		fi
+
+
 	    else
 		echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		echo "     Cannot find fastq file for" $strain: $file ;
@@ -73,36 +121,61 @@ for platform in "${platforms[@]}"; do
 		    thisfolder="${file%_*}"
 		    thistar=$thisfolder.tar.gz
 		    
+
 		    folderok=0
 		    if [ -d $thisfolder ]; then
-			foldchek=`du -sh $thisfolder | awk '{print $1}'`
-		     	folderok=0
-
+			foldcheck=`du -sh $thisfolder | awk '{print $1}'`
+			#ocheck=`grep $(basename $thisfolder) $thisdir/utils/f5folders.list | awk '{print $1}'`
+			ocheck=12G #canc
+			
+			if [ $foldcheck != $ocheck ]; then 
+			    #echo "      Problems with the folder $thisfolder:"
+			    #echo "          checking if it's an un-compression problem or a download problem"
+			    folderok=0
+			else
+			    folderok=1
+			fi
 		    fi
 		    
+
 		    if [ $folderok -eq 0 ]; then # if folder not ok, check tar file 
 			if [ -f $thistar ]; then
 			    tarcheck=`du -sh $thistar | awk '{print $1}'`
 			    ocheck=`grep $(basename $thistar) $thisdir/utils/tarfiles.list | awk '{print $1}'`
-
+			    
+			    #ocheck=$tarcheck #canc
 			    if [ $tarcheck != $ocheck ]; then 
-				echo "     The tar file $tarfile did now download properly:"
-				echo "     Force redownload it with:"
+				echo; echo "     *** PROBLEM FOUND! ***"   
+				echo "     The tar file $tarfile did not download properly:"
+				echo "       Force redownload it with:"
 				echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
 			    else
-				echo the tar file is ok
+				echo; echo "     *** PROBLEM FOUND! ***"   
+				# the tar file looks ok, so there is probably an error in uncompressing
+				echo "     Uncompression of $thistar in $thisfolder failed"
+				#rm -rf $thisfolder  #canc
+				echo "     !!!!    Please relaunch: $ ./launchme.sh download "  $strain
+				echo; echo "     If this does not help, try uncompressing manually:"
+				echo "        $ rm -rf " $thisfolder; echo "        $ cd " "${file%/*}"; 
+				echo "        $ tar -xvzf " $(basename $thistar)
+				echo "        $ cd" $thisdir; echo "        $ ./launchme.sh download" $strain      
 			    fi
 			else
 			    echo "     Cannot find tar.gz file for" $strain: $thistar ;
 			    echo "     Force redownload it with:"
 			    echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
 			fi
-		    fi
 
 
+		    else ## folder ok
+			echo; echo "     *** NO PROBLEM FOUND IN EARLIER STEPS ***"   
+			echo "     try to simply recreate the file:"
+			echo "         $  ./launchme.sh download" $strain 
 
+		    fi ## folder not ok?
 
-		fi
+		fi  ## platform
+
 	        missing=$(($missing+1))
 	    fi
 
@@ -112,7 +185,7 @@ for platform in "${platforms[@]}"; do
 	
 	if [[ $entries > 0 ]]; then
 	    if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
-		echo;echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+		echo; echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		echo "      Some files failed to download or un-compress properly "
 		echo "     Please check the warnings above and follow instructions "
 		echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 

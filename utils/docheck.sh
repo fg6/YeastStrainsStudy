@@ -66,11 +66,9 @@ for platform in "${platforms[@]}"; do
 		echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		echo "     !!!! " $thistrain $file  NOT OK ;  
 		echo "     !!!!    Something went wrong during the fastq preparation "
-		echo "     !!!!    Please "; 
-		echo "     !!!!       1. remove the fastq file: $ rm -f " $file
-		echo "     !!!!       2. relaunch: $ ./launchme.sh download "  $strain
+		echo "     !!!!    Please relaunch: $ ./launchme.sh download "  $strain
 		echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
-
+		rm -f $file
 		errors=$(($errors+1))
 	    fi
 	else
@@ -88,12 +86,12 @@ for platform in "${platforms[@]}"; do
 		if [ "${!check}" = "$thischeck" ]; then echo "    " $thistrain $file2  OK;
 		else 
 		    echo;echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
-		    echo "     !!!! " $thistrain $file  NOT OK ;  
+		    echo "     !!!! " $thistrain $file2  NOT OK ;  
 		    echo "     !!!!    Something went wrong during the fastq preparation "
-		    echo "     !!!!    Please "; 
-		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
-		    echo "     !!!!       2. relaunch: $ ./launchme.sh download "  $strain
+		    echo "     !!!!    Please relaunch: $ ./launchme.sh download "  $strain		 
 		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+	            rm -f $file2
+
                     errors=$(($errors+1))
 		fi
 	    else
@@ -116,10 +114,9 @@ for platform in "${platforms[@]}"; do
 		    echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		    echo "     !!!! " $thistrain $file  NOT OK ;  
 		    echo "     !!!!    Something went wrong during the fastq preparation "
-		    echo "     !!!!    Please "; 
-		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
-		    echo "     !!!!       2. relaunch: $ ./launchme.sh download "  $strain 
+		    echo "     !!!!    Please relaunch: $ ./launchme.sh download "  $strain
 		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+                    rm -f $file
                     errors=$(($errors+1))
 		fi
 	    else
