@@ -139,6 +139,8 @@ if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
         echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
         echo "      Some files failed to download or un-compress properly "
         echo "     Please check the warnings above and follow instructions "
+	echo "       If the instructions do not help, try a deep check:"
+	echo "            $ ./launchme.sh deepcheck $strain "
         echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
 else
         echo " All your files appear to be fine "

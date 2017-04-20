@@ -50,26 +50,59 @@ for platform in "${platforms[@]}"; do
 		    echo "     !!!!       1. remove the fastq file: $ rm -f " $file
 		    echo "     !!!!       2. relaunch: $ ./launchme.sh download "  $strain
 		    echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
-		    
-		    echo folder:
-		    ls $(basename $file .fastq)
-		    echo tar:
-		    ls $(basename $file .fastq).tar.gz
 		    errors=$(($errors+1))
+
+
+		    if [ $platform == 'ont' ]; then
+		    
+			echo folder:
+			ls $(basename $file .fastq)
+			echo tar:
+			ls $(basename $file .fastq).tar.gz
+
+
+		    fi
 
 		fi
 	    else
 		echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		echo "     Cannot find fastq file for" $strain: $file ;
-
-		echo folder:
-		echo $(basename $file _pass2D.fastq)
-		echo tar:
-		echo $(basename $file _pass2D.fastq).tar.gz
 		errors=$(($errors+1))
 
+		if [ $platform == 'ont' ]; then
+		    thisfolder="${file%_*}"
+		    thistar=$thisfolder.tar.gz
+		    
+		    folderok=0
+		    if [ -d $thisfolder ]; then
+			foldchek=`du -sh $thisfolder | awk '{print $1}'`
+		     	folderok=0
 
-	        #echo "          Download it with: "  $ ./launchme.sh download $strain 
+		    fi
+		    
+		    if [ $folderok -eq 0 ]; then # if folder not ok, check tar file 
+			if [ -f $thistar ]; then
+			    tarcheck=`du -sh $thistar | awk '{print $1}'`
+			    ocheck=`grep $(basename $thistar) $thisdir/utils/tarfiles.list | awk '{print $1}'`
+
+			    if [ $tarcheck != $ocheck ]; then 
+				echo "     The tar file $tarfile did now download properly:"
+				echo "     Force redownload it with:"
+				echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
+			    else
+				echo the tar file is ok
+			    fi
+			else
+			    echo "     Cannot find tar.gz file for" $strain: $thistar ;
+			    echo "     Force redownload it with:"
+			    echo "         $  ./launchme.sh download" $strain  $(basename $thistar)
+			fi
+		    fi
+
+
+
+
+		fi
 	        missing=$(($missing+1))
 	    fi
 
@@ -79,7 +112,7 @@ for platform in "${platforms[@]}"; do
 	
 	if [[ $entries > 0 ]]; then
 	    if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
-		echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+		echo;echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
 		echo "      Some files failed to download or un-compress properly "
 		echo "     Please check the warnings above and follow instructions "
 		echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 

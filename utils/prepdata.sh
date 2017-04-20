@@ -5,7 +5,9 @@ set -o pipefail
 thisdir=`pwd`
 singlestrain=$1
 clean=$2
-forcereload=$3
+force=$3
+
+
 
 if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<strain\> 
@@ -23,9 +25,23 @@ fi
 
 
 
-if  [[ $forcereload ==  "" ]]; then
+if  [[ $force ==  "" ]]; then
     forcereload=0
+    forceone=0
+elif [[ $force == 'all' ]]; then
+    forcereload=1
+    forceone=0
+elif [[ $force == 'none' ]]; then
+    forcereload=0
+    forceone=0
+else
+    forcereload=0
+    forceone=$force
 fi
+
+
+
+
 
 # get name and location of data
 source $thisdir/utils/runlist.sh
@@ -64,7 +80,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
     echo "   preparing ONT data for " $strain $rerun    
-    if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ]; then   ##  if fastq file is not there already
+    if [[ $rerun == 1  ||  $forcereload == 1  ||  $forceone != '0' ]] ; then   ##  if fastq file is not there already
 
 	echo "           downloading data "
 	
@@ -74,18 +90,35 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    fold=$(basename "$tarfile" .tar.gz)
 	    
 	    echo "           downloading" $tarfile >> $ofile
-	    
+
+
+	    forcethis=0
+  	    if [ $forceone != '0' ] && [ $forceone == $(basename $tarfile ) ]; then 
+		echo "           "Force reloading $tarfile
+	 	forcethis=1
+		# no need to delete the tar.gz, wget in principle should just restart from where it stopped. 
+		# Well no, apparently restarting must be supported by the server, anyway, wget should overwrite the file
+	 	rm -f $strain\_pass2D.fastq $strain\_all2D.fastq  # delete final files so they are regenerated 
+	    fi 
 	   
-	    if [[ ! -f $tarfile && ( ! -f $fold\_pass2D.fastq  ||  $forcereload -eq 1 ) ]]; then  # download if file is not there already	
-		
+	    if [[ ( ! -f $tarfile && ( ! -f $fold\_pass2D.fastq  ||  $forcereload -eq 1 )) || $forcethis == 1 ]]; then  # download if file is not there already	
+	
 
 		if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
 	    	    wget -nv -c $ontftp/$tarfile > /dev/null # &>>$ofile 
 		    
 		    if [[ "$?" != 0 ]]; then
+			# trying again
+		        wget -nv -c $ontftp/$tarfile > /dev/null
 			echo "Error downloading file" $tarfile >>$ofile ; echo "Please re-launch the script!" >>$ofile 
 			echo "Error downloading file" $tarfile; echo "Please re-launch the script!"
-			exit
+			if [[ "$?" != 0 ]]; then
+				echo "Error downloading file" $tarfile >>$ofile ; echo "Please re-launch the script!" >>$ofile
+                        	echo "Error downloading file" $tarfile; echo "Please re-launch the script!"   # maybe add deepcheck note?
+				rm -f $tarfile
+				# remove file otherwise download will not start again
+				exit
+			fi
 		    fi
 		else 
 		    echo "Could not find url " $file
@@ -95,14 +128,16 @@ for strain in "${strains[@]}"; do   ## loop on strains
             
 	   
 	    echo "           untar-ring data " >> $ofile
-	    if [[ ! -d $fold  && ( ! -f $fold\_pass2D.fastq ||  $forcereload -eq 1 ) ]] ; then # untar if not done already
+	    if [[ ( ! -d $fold  && ( ! -f $fold\_pass2D.fastq ||  $forcereload -eq 1 ))  || $forcethis == 1 ]] ; then # untar if not done already
 
-		if [ $forcereload -eq 1 ]; then rm -rf $fold; fi
+		if [ $forcereload -eq 1 ]  || [ $forcethis -eq 1 ]; then rm -rf $fold; fi
 		tar -xvzf $tarfile  > /dev/null 2>>$ofile 
 
 		if [[ "$?" != 0 ]]; then
-		    echo "Error un-tarring file" $tarfile >>$ofile ; 
-		    echo "Error un-tarring file" $tarfile; 
+		    echo "Error uncompressing file" $tarfile >>$ofile ; 
+		    echo "Error uncompressing file" $tarfile; 
+		    rm -rf $fold
+  		    echo "Please re-launch the script!"
 		fi
 
 
@@ -110,8 +145,8 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	   
            
           
-	    if [ ! -f $fold\_pass2D.fastq ]  ||  [ $forcereload -eq 1 ]; then  # extract fastq from fast5, if not done already
-                if [ $forcereload -eq 1 ]; then rm -f $fold\_pass2D.fastq $fold\_fail2D.fastq; fi
+	    if [ ! -f $fold\_pass2D.fastq ]  ||  [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then  # extract fastq from fast5, if not done already
+                if [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then rm -f $fold\_pass2D.fastq $fold\_fail2D.fastq; fi
 		echo "           creating fastqs " >> $ofile
 	        
 		fast5pass=$fold/reads/downloads/pass
