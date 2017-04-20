@@ -18,18 +18,19 @@ if [ ! -f  $thisdir/utils/src/n50/n50 ] ; then
     exit
 fi
 
-platforms=( pacbio )
+platforms=( ont pacbio )
 fqlist="$thisdir/utils/fastq_bases.list"
 
+
+errors=0
+missing=0
+entries=0
+
 for platform in "${platforms[@]}"; do  
-    echo; echo " *****************"; echo  "   " $platform files:; echo " *****************"; 
+#    echo; echo " *****************"; echo  "   " $platform files:; echo " *****************"; 
 
     for strain in "${strains[@]}"; do   
-        echo  "   strain=" $strain
-
-	errors=0
-	missing=0
-	entries=0
+#        echo  "   strain=" $strain
 
 	while read -r f1 f2 || [[ -n "$f1" ]]; do
 	    file=$f1
@@ -141,7 +142,7 @@ for platform in "${platforms[@]}"; do
 			echo; echo "     *** PROBLEM FOUND! ***"   
 			echo "     Files "${file%.*}"* did not download properly:"
 			echo "       Force redownload them with:"
-			echo "         $  ./launchme.sh download" $strain  $(basename ${file%.*}) ## need to add in prepdata
+			echo "         $  ./launchme.sh download" $strain  $(basename ${file%.*}) 
 		    fi
 
 		fi # platform		
@@ -150,16 +151,17 @@ for platform in "${platforms[@]}"; do
 	done < <( grep $strain "$fqlist" | grep $platform )
 
 
-	
-	if [[ $entries > 0 ]]; then
-	    if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
-		echo; echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
-		echo "      Some files failed to download or un-compress properly "
-		echo "     Please check the warnings above and follow instructions "
-		echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
-	    else
-		echo "   Good news: all your files appear to be fine "
-	    fi
-	fi
-    done
+    done		
 done
+if [[ $entries > 0 ]]; then
+   if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
+	echo; echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
+	echo "      Some files failed to download or un-compress properly "
+	echo "     Please check the warnings above and follow instructions "
+	echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+   else
+	echo; echo; echo "   Good news: all your files appear to be fine "
+   fi
+fi
+  
+

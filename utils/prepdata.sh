@@ -69,7 +69,7 @@ folder=$thisdir/fastqs/ont
 mkdir -p $folder
 cd $folder
 
-strains=()  #canc
+
 for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
@@ -197,7 +197,16 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
             if [ $forcereload -eq 1 ]; then rm -f $strain\_pass2D.fastq $strain\_all2D.fastq; fi
- 
+	    for f in *.fastq; do 
+		if [ -f $strain\_pass2D.fastq ]; then 
+		    if [[ $strain\_pass2D.fastq != $f ]]; then
+			if [[ $f -nt $strain\_pass2D.fastq ]]; then
+			    rm -f $strain\_pass2D.fastq  $strain\_all2D.fastq  # if there are newly downloaded fastq make sure to regenerate the final fastqs!
+			fi
+		    fi
+		fi
+	    done
+
 	    for f in *_pass2D.fastq; do 
 		cat $f >> $strain\_pass2D.fastq
 	    done 
@@ -248,8 +257,6 @@ for strain in "${strains[@]}"; do   ## loop on strains
 done # strain
 
 
-strains=( $singlestrain )
-#canc
 #################################################
 #******************* PacBio ******************* #
 #################################################
@@ -277,30 +284,27 @@ for strain in "${strains[@]}"; do   ## loop on strains
     fi
     
     toterror=0  
-    rerun=1 #canc
 
     if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ] || [ $forceone != '0' ]; then  ##  if fastq file is not there already or force reload
 
 	runs=pb${strain}[@]
-	
-	for run in "${!runs}"; do   ## loop over pacbio runs
+       	for run in "${!runs}"; do   ## loop over pacbio runs
 	    
 	    runerror=0    
 	    thislist=pb$strain\_${run}[@]
 	    for h5file  in "${!thislist}"; do # loop over pacbio runs
-	       
 		forcethis=0
-  		if [ $forcepacbio != '0' ]; then
+  		if [[ $forcepacbio != '0' ]]; then
 		    if [[ $(basename $h5file) == $forceone* ]]; then 
 			echo "           "Force reloading $h5file
 	 		forcethis=1
 			rm -f  $(basename $h5file .bas.h5).fastq $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq
 		    fi 	
 		fi
-
+		
 		if [ ! -f $(basename $h5file) ] || [ $forcereload -eq 1 ] || [ $forcethis == 1 ]; then  # download if file is not there already
 	            echo "           downloading" $h5file >> $ofile	
-		        
+		
 		    if [[ $ii == 0 ]]; then echo "           downloading " $h5file; fi
 		    if [[ `wget -S --spider $h5file 2>&1  | grep exists` ]]; then
 			wget  -nv -c $h5file > /dev/null #2>>$ofile  
@@ -325,38 +329,36 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
             if [ $forcereload -eq 1 ]; then rm -f *.fastq; fi
 	    
+	    
 	    if [[ $runerror == 0 ]]; then
-		which python
 		for file in *.bas.h5; do
                     echo "           extracting fastqs using bash5tools.py" $file >> $ofile
-		    echo "           extracting fastqs using bash5tools.py" $file $(basename $file .bas.h5).fastq
+		    #echo "           extracting fastqs using bash5tools.py" $file 
 		    if [ ! -f $(basename $file .bas.h5).fastq ]; then
-			python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file  # &>>$ofile 
+			python $thisdir/utils/src/pbh5tools/bin/bash5tools.py --minLength 500 --minReadScore 0.8000 --readType subreads --outType fastq $file #&>>$ofile 
 		    fi
 		done
 	    fi
-
-	    #echo rerunning $run #canc
-	    #echo "${!runs}" #canc
-
-
 	done  ## runs
-
-
-	echo $toterror
 
 
 	if [[ $toterror == 0 ]]; then
 	    # fastq per run ready: now merge them in a single file
             echo "           merging fastqs " >> $ofile
-            echo "           merging fastqs " 
+            #echo "           merging fastqs " 
 	    
             if [ $forcereload -eq 1 ]; then 
 		rm -f $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq; 
 	    fi
 
 	    for f in *.fastq; do 
-		echo $f
+		if [ -f $strain\_pacbio.fastq ]; then 
+		    if [[ $strain\_pacbio.fastq != $f ]]; then
+			if [[ $f -nt $strain\_pacbio.fastq ]]; then
+			    rm -f $strain\_pacbio.fastq  s288c_pacbio_ontemu_31X.fastq  # if there are newly downloaded fastq make sure to regenerate the final fastqs!
+			fi
+		    fi
+		fi
 	    done
 
 	    if [ ! -f $strain\_pacbio.fastq ]; then 
@@ -391,7 +393,6 @@ for strain in "${strains[@]}"; do   ## loop on strains
    fi
    
 done
-
 
 
 ################################################
