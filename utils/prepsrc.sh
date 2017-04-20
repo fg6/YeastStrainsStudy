@@ -14,6 +14,15 @@ if [ ! -f locpy/bin/activate ]; then
     echo; echo "  creating a local python environment..."
 
     cd $thisdir/utils/src
+    #wpython=`which python`
+    #isvenv=`python ../isvenv.py`
+    #if [[ $isvenv == 1 ]]; then 
+#	echo source $(dirname $wpython)/activate; 
+#	#deactivate; 
+#    fi
+#    which $python
+#    exit
+
     pyversion=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(major);'`
     minor=`python -c 'import platform; major, minor, patch = platform.python_version_tuple(); print(minor);'`
 

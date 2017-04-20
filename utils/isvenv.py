@@ -7,6 +7,6 @@ def is_venv():
 
 
 if is_venv():
-    print('inside virtualenv or venv')
+    print('1')
 else:
-    print('outside virtualenv or venv')
+    print('0')
