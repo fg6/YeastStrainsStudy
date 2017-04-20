@@ -84,7 +84,6 @@ for strain in "${strains[@]}"; do   ## loop on strains
     elif [ $strain == "s288c" ] && [ ! -f $strain\_all2D.fastq ]; then rerun=1; 
     fi
 
-
     echo "   preparing ONT data for " $strain $rerun    
     error=0
     if [[ $rerun == 1  ||  $forcereload == 1  ||  $forceone != '0' ]] ; then   ##  if fastq file is not there already
