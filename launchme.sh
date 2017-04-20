@@ -6,7 +6,7 @@ thisdir=`pwd`
 
 whattodo=$1
 singlestrain=$2
-
+forcereload=$3
 
 if [ $# -lt 1 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<command\> \<strain\>  
@@ -39,7 +39,7 @@ if [ $whattodo == "download" ]; then
   echo; echo " Downloading and preparing data..."
   ###################################################
 	cd $thisdir
-	$thisdir/utils/prepdata.sh $singlestrain 0
+	$thisdir/utils/prepdata.sh $singlestrain 0  $forcereload
 	echo "                 ... requested data ready!"
 fi
 

@@ -5,6 +5,7 @@ set -o pipefail
 thisdir=`pwd`
 singlestrain=$1
 clean=$2
+forcereload=$3
 
 if [ $# -lt 2 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<strain\> 
@@ -20,6 +21,11 @@ else
     strains=( s288c sk1 cbs n44 )
 fi
 
+
+
+if  [[ $forcereload ==  "" ]]; then
+    forcereload=0
+fi
 
 # get name and location of data
 source $thisdir/utils/runlist.sh
@@ -38,6 +44,10 @@ folder=$thisdir/fastqs/ont
 mkdir -p $folder
 cd $folder
 
+
+
+
+
 for strain in "${strains[@]}"; do   ## loop on strains
     mkdir -p $folder/$strain
     cd  $folder/$strain
@@ -54,7 +64,7 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
     echo "   preparing ONT data for " $strain $rerun    
-    if [ $rerun -eq 1 ]; then   ##  if fastq file is not there already
+    if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ]; then   ##  if fastq file is not there already
 
 	echo "           downloading data "
 	
@@ -64,7 +74,11 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	    fold=$(basename "$tarfile" .tar.gz)
 	    
 	    echo "           downloading" $tarfile >> $ofile
-	    if [ ! -f $tarfile ] && [ ! -f $fold\_pass2D.fastq ] ; then  # download if file is not there already
+	    
+	   
+	    if [[ ! -f $tarfile && ( ! -f $fold\_pass2D.fastq  ||  $forcereload -eq 1 ) ]]; then  # download if file is not there already	
+		
+
 		if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
 	    	    wget -nv -c $ontftp/$tarfile > /dev/null # &>>$ofile 
 		    
@@ -78,8 +92,12 @@ for strain in "${strains[@]}"; do   ## loop on strains
 		fi
 	    fi
 
+            
+	   
 	    echo "           untar-ring data " >> $ofile
-	    if [ ! -d $fold ] && [ ! -f $fold\_pass2D.fastq ] ; then # untar if not done already
+	    if [[ ! -d $fold  && ( ! -f $fold\_pass2D.fastq ||  $forcereload -eq 1 ) ]] ; then # untar if not done already
+
+		if [ $forcereload -eq 1 ]; then rm -rf $fold; fi
 		tar -xvzf $tarfile  > /dev/null 2>>$ofile 
 
 		if [[ "$?" != 0 ]]; then
@@ -89,10 +107,13 @@ for strain in "${strains[@]}"; do   ## loop on strains
 
 
 	    fi
-	    
-	    if [ ! -f $fold\_pass2D.fastq ]; then  # extract fastq from fast5, if not done already
+	   
+           
+          
+	    if [ ! -f $fold\_pass2D.fastq ]  ||  [ $forcereload -eq 1 ]; then  # extract fastq from fast5, if not done already
+                if [ $forcereload -eq 1 ]; then rm -f $fold\_pass2D.fastq $fold\_fail2D.fastq; fi
 		echo "           creating fastqs " >> $ofile
-	    
+	        
 		fast5pass=$fold/reads/downloads/pass
 		fast5fail=$fold/reads/downloads/fail
 		if ! ls $fast5pass  &> /dev/null; then
@@ -125,6 +146,9 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	else
 	    echo "           merging fastqs " >> $ofile
             echo "           merging fastqs "
+
+
+             if [ $forcereload -eq 1 ]; then rm -f $strain\_pass2D.fastq $strain\_all2D.fastq; fi
  
 	    for f in *_pass2D.fastq; do 
 		cat $f >> $strain\_pass2D.fastq
@@ -175,6 +199,8 @@ for strain in "${strains[@]}"; do   ## loop on strains
     fi
 done # strain
 
+
+
 #################################################
 #******************* PacBio ******************* #
 #################################################
@@ -202,36 +228,35 @@ for strain in "${strains[@]}"; do   ## loop on strains
     fi
 
  
-    if [ $rerun -eq 1 ]; then  ##  if fastq file is not there already
+    if [ $rerun -eq 1 ] || [ $forcereload -eq 1 ]; then  ##  if fastq file is not there already
 
 	runs=pb${strain}[@]
 	for run in "${!runs}"; do   ## loop over pacbio runs
 	    
 	    thislist=pb$strain\_${run}[@]
-	    for tarfile  in "${!thislist}"; do # loop over pacbio runs
-		if [ ! -f $(basename $tarfile) ]; then  # download if file is not there already
-	            echo "           downloading" $tarfile >> $ofile
+	    for h5file  in "${!thislist}"; do # loop over pacbio runs
 
-		    if [[ $ii == 0 ]]; then echo "           downloading " $tarfile; fi
-		    if [[ `wget -S --spider $tarfile 2>&1  | grep exists` ]]; then
-			wget  -nv -c $tarfile > /dev/null #2>>$ofile  
+		if [ ! -f $(basename $h5file) ] || [ $forcereload -eq 1 ]; then  # download if file is not there already
+	            echo "           downloading" $h5file >> $ofile	
+		
+		    if [[ $ii == 0 ]]; then echo "           downloading " $h5file; fi
+		    if [[ `wget -S --spider $h5file 2>&1  | grep exists` ]]; then
+			wget  -nv -c $h5file > /dev/null #2>>$ofile  
 			
 			if [[ "$?" != 0 ]]; then
-			    echo "Error downloading file" $tarfile >>$ofile; echo "Please re-launch the script!">>$ofile
-			    echo "Error downloading file" $tarfile; echo "Please re-launch the script!"
+			    echo "Error downloading file" $h5file >>$ofile; echo "Please re-launch the script!">>$ofile
+			    echo "Error downloading file" $h5file; echo "Please re-launch the script!"
 			    exit
 			fi
 
 		    else 
-			echo "Could not find url " $tarfile &>> $ofile 
+			echo "Could not find url " $h5file &>> $ofile 
 		    fi
 		fi
 	    done  # download each file in a run
 
+            if [ $forcereload -eq 1 ]; then rm -f *.fastq; fi
 
-	    
-	    # files are downloaded, now extract fastq 	    
-	    #echo "           extracting fastqs"
 	    for file in *.bas.h5; do
                 echo "           extracting fastqs using bash5tools.py" $file >> $ofile
 		if [ ! -f $(basename $file .bas.h5).fastq ]; then
@@ -243,6 +268,8 @@ for strain in "${strains[@]}"; do   ## loop on strains
 	# fastq per run ready: now merge them in a single file
         echo "           merging fastqs " >> $ofile
         echo "           merging fastqs " 
+
+        if [ $forcereload -eq 1 ]; then rm -f $strain\_pacbio.fastq s288c_pacbio_ontemu_31X.fastq; fi
 
 	if [ ! -f $strain\_pacbio.fastq ]; then 
 	    for f in *.fastq; do 
@@ -291,13 +318,16 @@ for strain in "${strains[@]}"; do
    
     for cramfile in "${!thislist}"; do
 	file=$miseqftp/$cramfile
-	if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ] ; then
+	if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ]  || [ $forcereload -eq 1 ]; then
+	 
+            if [ $forcereload -eq 1 ]; then rm -f *.fastq; fi
+
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
 	    	wget  -nv -c $file > /dev/null #2>>$ofile  
 
 		if [[ "$?" != 0 ]]; then
-		    echo "Error downloading file" $tarfile >>$ofile ; echo "Please re-launch the script!" >>$ofile  
-		    echo "Error downloading file" $tarfile;  echo "Please re-launch the script!"
+		    echo "Error downloading file" $file >>$ofile ; echo "Please re-launch the script!" >>$ofile  
+		    echo "Error downloading file" $file;  echo "Please re-launch the script!"
 		    exit
 		fi
 
