@@ -34,7 +34,8 @@ Usage:
 
         strain= s288c, sk1, n44, cbs or all  [s288c]
 
-	If the check give you warnings, probably some file failed to download properly, follow the instructions given in the output
+	If the check give you warnings, probably some file failed to download properly, 
+	follow the instructions given in the output
 	If the instructions do not help, try with 
 	
 	$ ./launchme.sh deepcheck <strain>
