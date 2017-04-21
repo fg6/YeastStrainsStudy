@@ -45,7 +45,7 @@ Usage:
 
         $ ./launchme.sh clean <strain>
 
-			!!!!!   Warning  !!!!! 
+	!!!!!   Warning  !!!!! 
 	1. Please run this only after Step 3 and only if Step 3 show no errors or warnings, 
 		otherwise you will have to download everything again!
 	2. Please do not run this if you intend to run Nanopolish, 
@@ -55,7 +55,7 @@ Usage:
 
         $ ./launchme.sh nanoclean <strain>
 
-        	        !!!!!   Warning  !!!!!
+        !!!!!   Warning  !!!!!
         Please run this only after Step 3 and only if Step 3 show no errors or warnings,
           otherwise you will have to download everything again!
 
