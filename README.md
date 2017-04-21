@@ -46,7 +46,7 @@ Usage:
         $ ./launchme.sh clean <strain>
 
 	!!!!!   Warning  !!!!! 
-	1. Please run this only after Step 3 and only if Step 3 show no errors or warnings, 
+	1. Please run this only after Step 3 and only if Step 3 showed no errors or warnings, 
 		otherwise you will have to download everything again!
 	2. Please do not run this if you intend to run Nanopolish, 
 	        as Nanopolish needs the s288c fast5 files, run instead Step 4/B
@@ -56,7 +56,7 @@ Usage:
         $ ./launchme.sh nanoclean <strain>
 
         !!!!!   Warning  !!!!!
-        Please run this only after Step 3 and only if Step 3 show no errors or warnings,
+        Please run this only after Step 3 and only if Step 3 showed no errors or warnings,
           otherwise you will have to download everything again!
 
 
