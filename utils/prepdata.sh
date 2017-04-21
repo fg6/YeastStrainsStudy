@@ -413,7 +413,7 @@ for strain in "${strains[@]}"; do
 	file=$miseqftp/$cramfile
 	if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ]  || [ $forcereload -eq 1 ]; then
 	 
-            if [ $forcereload -eq 1 ]; then rm -f *.fastq; fi
+            if [ $forcereload -eq 1 ]; then rm -f $strain\_?.fastq; fi
 
 	    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
 	    	wget  -nv -c $file > /dev/null #2>>$ofile  
