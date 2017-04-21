@@ -41,7 +41,7 @@ Usage:
 	$ ./launchme.sh deepcheck <strain>
 
 
-##### Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders:
+##### Step 4. If everything looks ok and there are no warnings from Step 3, you can clean up the data folders, deleting every intermediate files and folders:
 
         $ ./launchme.sh clean <strain>
 
