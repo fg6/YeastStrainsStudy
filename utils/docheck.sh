@@ -13,6 +13,7 @@ fi
 platforms=( ont pacbio miseq )
 
 
+# Number of reads the files are suppose to have:
 #pass2D, all2D
 ont_s288c=( 382637184 737451072 )
 ont_sk1=( 51002440 )
@@ -140,7 +141,10 @@ if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
 	echo "            $ ./launchme.sh deepcheck $strain "
         echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
 else
-        echo " All your files appear to be fine "
+        echo; echo " All your fastq files appear to be fine"
+	echo "   Please go ahead and clean up you folders with ./launchme.sh clean all"
+	echo "     ...but remember that if you clean up your fast5 files will be deleted "
+        echo "          and you will not be able to run nanopolish until you have redownloaded them"
 fi
 
 

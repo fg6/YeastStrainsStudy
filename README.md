@@ -44,19 +44,29 @@ Usage:
 
         $ ./launchme.sh clean <strain>
 
-	Warning!! please notice that to run Nanopolish the original fast5 folders are needed for s288c, 
-		if you clean data for the s288c strain, you will not be able to run Nanopolish until 
-		you download again the fast5 data with ./launchme.sh download s288c. 
-		It is ok to clean up the other strain data, as Nanopolish is only run on s288c.
+			!!!!!   Warning  !!!!! 
+	1. Please run this only after Step 3 and only if Step 3 show no errors or warnings, 
+		otherwise you will have to download everything again!
+	2. Please do not run this if you intend to run Nanopolish, 
+	        as Nanopolish needs the s288c fast5 files, run instead Step 4/B
+ 
+##### Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders not needed by Nanopolish:
+
+        $ ./launchme.sh nanoclean <strain>
+
+        	        !!!!!   Warning  !!!!!
+        Please run this only after Step 3 and only if Step 3 show no errors or warnings,
+          otherwise you will have to download everything again!
+
 
 
 ##### Disk space required:
 
-If not cleaning up (clean=0):  1.7TB 
+If not cleaning up:  1.7TB 
 
-After cleaning all (clean=1):  < 30GB.
+After cleaning all (clean):  < 30GB.
 
-After cleaning all except s288c (to run Nanopolish): ~700GB 
+After cleaning all except files for Nanopolish (nanoclean): ~700GB 
 
 ##### Requirements for installing and preparing data:
 A python version >= 2.7 is needed. Please 

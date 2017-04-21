@@ -12,13 +12,18 @@ else
 fi
 platforms=( ont pacbio miseq )
 
+miseq_s288c=( fastqs/miseq/18429_1_1.cram )
+miseq_cbs=( fastqs/miseq/18429_1_2.cram )
+miseq_n44=( fastqs/miseq/18429_1_3.cram )
+miseq_sk1=( fastqs/miseq/18429_1_4.cram )
+
 
 if [ ! -f  $thisdir/utils/src/n50/n50 ] ; then
     echo Some utilities are missing, please run ./launchme.sh install
     exit
 fi
 
-platforms=( ont pacbio )
+platforms=( miseq )
 fqlist="$thisdir/utils/fastq_bases.list"
 
 
@@ -60,7 +65,6 @@ for platform in "${platforms[@]}"; do
 
 	    if [[ $thiserror != 0 ]]; then  ## if there were errors for this file, check in more details:
 
-
 		### CHECKS FOR ONT FILES AND FOLDERS ####
 		if [ $platform == 'ont' ]; then
 		    rm -rf $file
@@ -73,7 +77,7 @@ for platform in "${platforms[@]}"; do
 		    if [ -d $thisfolder ]; then
 			foldcheck=`du -sh $thisfolder | awk '{print $1}'`
 			ocheck=`grep $(basename $thisfolder) $thisdir/utils/f5folders.list | awk '{print $1}'`
-			#ocheck=12G #canc
+			
 			
 			if [ $foldcheck != $ocheck ]; then 
 			    folderok=0
@@ -84,10 +88,10 @@ for platform in "${platforms[@]}"; do
 
 		    if [ $folderok -eq 0 ]; then # if folder not ok, check tar file 
 			if [ -f $thistar ]; then
-			    tarcheck=`du -sh $thistar | awk '{print $1}'`
-			    ocheck=`grep $(basename $thistar) $thisdir/utils/tarfiles.list | awk '{print $1}'`
 			    
-				#ocheck=$tarcheck #canc
+			    tarcheck=`md5sum $thistar | awk '{print $1}'`
+			    ocheck=`grep $(basename $thistar) $thisdir/utils/checksum.list | awk '{print $1}'`
+			    
 			    if [ $tarcheck != $ocheck ]; then 
 				echo; echo "     *** PROBLEM FOUND! ***"   
 				echo "     The tar file $tarfile did not download properly:"
@@ -127,8 +131,9 @@ for platform in "${platforms[@]}"; do
 		    for h5file in "${tocheck[@]}"; do  
 			thisfile=${file%.*}.$h5file
 			if [ -f $thisfile ]; then
-			    h5check=`du -sh $thisfile | awk '{print $1}'`
-			    ocheck=`grep $(basename $thisfile) $thisdir/utils/h5files.list | awk '{print $1}'`
+			    h5check=`md5sum $thisfile | awk '{print $1}'`
+			    ocheck=`grep $(basename $thisfile) $thisdir/utils/checksum.list | awk '{print $1}'`
+
 			    if [ $h5check != $ocheck ]; then 
 				isok=0
 			    fi
@@ -144,15 +149,50 @@ for platform in "${platforms[@]}"; do
 			echo "       Force redownload them with:"
 			echo "         $  ./launchme.sh download" $strain  $(basename ${file%.*}) 
 		    fi
+	    
+
+	    
+	    elif [ $platform == 'miseq' ]; then
+		    rm -rf $file 
+		    
+		    isok=1
+
+		    thislist=miseq_${strain}[@]
+		    for cramfile  in "${!thislist}"; do   # loop over ont runs		    
+			if [ -f $cramfile ]; then
+			    check=`md5sum $cramfile | awk '{print $1}'`
+			    ocheck=`grep $(basename $cramfile) $thisdir/utils/checksum.list | awk '{print $1}'`
+
+		
+			    if [ $check != $ocheck ]; then 
+				isok=0
+			    fi
+			else
+			    isok=0
+			fi
+		    done
+
+		    if [[ $isok == 0 ]]; then
+			echo; echo "     *** PROBLEM FOUND! ***"   
+			echo "     File $cramfile did not download properly or is missing:"
+			echo "       Redownload it and re-create the fastq file with:"
+			echo "         $  ./launchme.sh download" $strain 
+		    fi
 
 		fi # platform		
 	    fi ## if errors found
 	    
+
+
 	done < <( grep $strain "$fqlist" | grep $platform )
 
 
     done		
 done
+
+
+
+
 if [[ $entries > 0 ]]; then
    if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
 	echo; echo; echo "     !!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!! " 
@@ -160,7 +200,8 @@ if [[ $entries > 0 ]]; then
 	echo "     Please check the warnings above and follow instructions "
 	echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
    else
-	echo; echo; echo "   Good news: all your files appear to be fine "
+       echo; echo "     All your intermediate files appear to be fine,"
+       echo "     if './launchme.sh check strain' failed, try to recreate the fastq files with './launchme.sh download strain' "
    fi
 fi
   

@@ -46,12 +46,22 @@ fi
 
 if [ $whattodo == "clean" ]; then
   ###################################################
-  echo; echo " Cleaning data..."
+  #### echo " Cleaning data..."
   ###################################################
 
         cd $thisdir
         $thisdir/utils/prepdata.sh $singlestrain 1
-        echo "                 ... cleaned data!"
+        #echo "                 ... cleaned data!"
+fi
+
+if [ $whattodo == "nanoclean" ]; then
+  #####################################################################
+  echo; echo " Cleaning data saving the fast5 needed to run Nanopolish"
+  #####################################################################
+
+        cd $thisdir
+        $thisdir/utils/prepdata.sh $singlestrain -1
+        #echo "                 ... cleaned data!"
 fi
 
 
@@ -66,7 +76,7 @@ fi
 
 if [ $whattodo == "deepcheck" ]; then
   ###################################################
-  echo; echo " Checking fastq files..." 
+  echo; echo " Checking intermediate files..." 
   ###################################################
         cd $thisdir
         $thisdir/utils/deepcheck.sh $singlestrain 
