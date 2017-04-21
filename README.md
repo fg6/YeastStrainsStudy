@@ -51,7 +51,7 @@ Usage:
 	2. Please do not run this if you intend to run Nanopolish, 
 	        as Nanopolish needs the s288c fast5 files, run instead Step 4/B
  
-##### Step 4. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders not needed by Nanopolish:
+##### Step 4/B. If everything looks ok and there are no warnings, you can clean up the data folders, deleting every intermediate files and folders not needed by Nanopolish:
 
         $ ./launchme.sh nanoclean <strain>
 
