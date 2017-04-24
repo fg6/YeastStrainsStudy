@@ -496,7 +496,7 @@ for strain in "${strains[@]}"; do
 		if [ ! -f $folder/$cramfile ]; then
 		    
 		    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-			echo wget
+		
 			wget  -nv -c $file &> $wgetfile 
 			
 			if [[ "$?" != 0 ]]; then
