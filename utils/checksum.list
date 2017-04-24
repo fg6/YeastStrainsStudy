@@ -1,13 +1,9 @@
 
 ## miseq
-a07685f0a75f123c5dae8259537795d3  18429_1_1.cram
-c930f5911e587d8ae18050ddaa63553b  18429_1_2.cram
-3d2de3a54c5a6fa13f1e3982c5f86d6f  18429_1_3.cram
-f29f2f32ddd684cf0acc9c7eced057bd  18429_1_4.cram
-
-
-
-
+51eb25bd0c0b7bbbc09c604a00126ef5  fastqs/miseq/18429_1#1.cram
+c1c6b69ebd3c776a507500031e2e891b  fastqs/miseq/18429_1#2.cram
+61cc1e8037a27595db1f46e3d2f3f724  fastqs/miseq/18429_1#3.cram
+8c3c3b27044831da30f861c2bbeb8f43  fastqs/miseq/18429_1#4.cram
 
 
 ## pacbio

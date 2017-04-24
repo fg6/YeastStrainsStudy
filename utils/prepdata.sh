@@ -488,6 +488,8 @@ for strain in "${strains[@]}"; do
 	thislist=miseq_${strain}[@]
 	for cramfile in "${!thislist}"; do
 	    file=$miseqftp/$cramfile
+	    #echo $cramfile 
+
 	    if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ]  || [ $forcereload -eq 1 ]; then
 		
 		if [ $forcereload -eq 1 ]; then rm -f $strain\_?.fastq; fi
@@ -514,11 +516,10 @@ for strain in "${strains[@]}"; do
 				runerror=$(($runerror+1))
 				exit
 			    fi
-			else 
-			    echo "Could not find url " $file
 			fi
-			
 		    fi
+		else 
+		    echo "Could not find url " $file
 		fi # if no cramfile found
 
 	    
