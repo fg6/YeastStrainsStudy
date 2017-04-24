@@ -476,6 +476,7 @@ for strain in "${strains[@]}"; do
     mkdir -p $folder
     cd  $folder
 
+
     ofile=$folder/$strain\_prepdata.txt
     wgetfile=$folder/$strain\_wget.txt
 
@@ -485,20 +486,17 @@ for strain in "${strains[@]}"; do
 
 	echo "   preparing MiSeq data for " $strain
 	echo "   preparing MiSeq data for " $strain  >> $ofile
+
 	thislist=miseq_${strain}[@]
 	for cramfile in "${!thislist}"; do
 	    file=$miseqftp/$cramfile
-	    #echo $cramfile 
+	    myfile=`echo $cramfile | sed 's/%23/#/g'`
 
-	    if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ]  || [ $forcereload -eq 1 ]; then
-		
+	    if [ ! -f $strain\_1.fastq ] || [ ! -f $strain\_2.fastq ]  || [ $forcereload -eq 1 ]; then		
 		if [ $forcereload -eq 1 ]; then rm -f $strain\_?.fastq; fi
-		
-		
-		if [ ! -f $folder/$cramfile ]; then
-		    
+				
+		if [ ! -f $folder/$myfile ]; then
 		    if [[ `wget -S --spider $file 2>&1  | grep exists` ]]; then
-		
 			wget  -nv -c $file &> $wgetfile 
 			
 			if [[ "$?" != 0 ]]; then
@@ -507,7 +505,7 @@ for strain in "${strains[@]}"; do
 			    
 			    if [[ "$?" != 0 ]]; then
 				echo "     Failed again, error downloading file" $file >>$ofile ; echo "Please re-launch the script!" >>$ofile
-				echo "      Check errors in file" $wgetfile >>$ofile
+				echo "     Check errors in file" $wgetfile >>$ofile
 				echo "     Error downloading file" $file;  echo "      Check errors in file" $wgetfile ;
 				echo "     Maybe a network problem?  Please re-launch the script!"   
 				rm -f $(basename $file)
@@ -517,18 +515,23 @@ for strain in "${strains[@]}"; do
 				exit
 			    fi
 			fi
-		    fi
-		else 
-		    echo "Could not find url " $file
-		fi # if no cramfile found
+		    else 
+			echo "Could not find url " $file
+		    fi # if no cramfile found
+		fi
 
-	    
-		if [ -f $folder/$cramfile ]; then
+		if [ -f $folder/$myfile ]; then
 		    rm -f $strain\_1.fastq $strain\_2.fastq
-		    $thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $cramfile &>>$ofile  
+		    $thisdir/utils/src/biobambam2-2.0.37-release-20160407134604-x86_64-etch-linux-gnu/bin/bamtofastq inputformat=cram exclude=SECONDARY,SUPPLEMENTARY,QCFAIL F=$strain\_1.fastq F2=$strain\_2.fastq < $myfile &>>$ofile  
 		    
-		    grep "failed" $ofile
-		
+		    
+   		    #if `grep "failed" $ofile`  &> /dev/null; then
+		    #	fails=0
+		    #	echo no fails
+		    #else
+		    #	fails=`grep "failed" $ofile`
+	 	    #	echo $fails
+		    #fi
 		fi
 	    fi
 	done
