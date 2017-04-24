@@ -140,11 +140,15 @@ if [[ $missing != 0 ]] || [[ $errors != 0 ]]; then
 	echo "       If the instructions do not help, try a deep check:"
 	echo "            $ ./launchme.sh deepcheck $strain "
         echo "     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " 
+	echo
 else
         echo; echo " All your fastq files appear to be fine"
 	echo "   Please go ahead and clean up you folders with ./launchme.sh clean all"
 	echo "     ...but remember that if you clean up your fast5 files will be deleted "
         echo "          and you will not be able to run nanopolish until you have redownloaded them"
+	echo "   If you want to run Nanopolish, do instead a ./launchme.sh nanoclean all"
+	echo "      this will delete all intermediate files except the fastqs and the fast5 files needed by Nanopolish"
+	echo
 fi
 
 
