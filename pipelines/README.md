@@ -58,7 +58,7 @@ ontemu_sub.sh
 
 No input needed, will create a subsample of 31X from pacbio whle sample with read lenghts 
   similar to the ONT pass2D sample (31X). 
-  Please be patient, this script will require about XXX min.
+
 
 Please notice that as a random selection is involved in the subsampling, the final
   subsample will not necessarily have the same reads as the 
