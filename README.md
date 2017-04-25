@@ -14,9 +14,12 @@ To download and prepare the data and install the needed scripts and codes use th
 Usage: 
 
 	$ ./launchme.sh <command> <strain>
-	  command: command to be run. Options: install,download,check,deepcheck,clean,nanoclean
+	  command: command to be run. Options: install, download, check, deepcheck, clean, nanoclean, finalfastas, findassembly 
   	  strain: Download data for this strain/s, only for command=download or check 
 		  Options: s288c,sk1,cbs,n44,all [s288c]
+
+	  
+
 
 ##### Step 1. Download and install needed codes and scripts:
 	
