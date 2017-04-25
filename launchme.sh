@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
-set -o pipefail
+#set -o pipefail
 
 thisdir=`pwd`
 
@@ -10,7 +10,7 @@ forcereload=$3
 
 if [ $# -lt 1 ]  || [ $1 == '-h' ]; then
     echo; echo "  Usage:" $(basename $0) \<command\> \<strain\>  
-    echo "  command: command to be run. Options: install,download,check,cleani,nanoclean"
+    echo "  command: command to be run. Options: install,download,check,cleani,nanoclean,finalfastas,findassembly"
     echo "  strain: Download data for this strain/s, only for command=download or check."
     echo "          Options: s288c,sk1,cbs,n44,all"
     exit
@@ -43,6 +43,22 @@ if [ $whattodo == "download" ]; then
 	echo "                 ... requested data ready!"
 fi
 
+if [ $whattodo == "finalfastas" ]; then
+  ###################################################
+  echo; echo " Downloading final assemblies..."
+  ###################################################
+        cd $thisdir
+        $thisdir/utils/getassemblies.sh
+
+fi
+
+if [ $whattodo == "findassembly" ]; then
+  ###################################################
+  ###################################################
+        cd $thisdir
+        $thisdir/utils/findassembly.sh $strain #$assembler $platform1 $platform2
+
+fi
 
 if [ $whattodo == "clean" ]; then
   ###################################################
