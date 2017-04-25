@@ -1,5 +1,7 @@
 # YeastStrainsStudy
-Scripts to run pipeline for paper [ref-needed]
+Scripts to download the PacBio, ONT and MiSeq datasets used in [reference-paper]
+and run the pipelines as described in the paper or simply download the final assemblies as generated
+by the authors.
 
 ## Instructions #####
 Download repository: 
