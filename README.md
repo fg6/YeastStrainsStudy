@@ -11,8 +11,8 @@ Usage:
 
 	$ ./launchme.sh <command> <strain>
 	  command: command to be run. Options: install, download, check, deepcheck, clean, nanoclean, 
-	  									finalfastas, findassembly 
-  	  strain: Download data for this strain/s, only for command=download or check 
+	  							             finalfastas, findassembly 
+  	  strain: Download data for this strain/s, only for command=download, check or deepcheck
 		  Options: s288c,sk1,cbs,n44,all [s288c]
 
 
