@@ -125,9 +125,9 @@ else
 
     # miniasm assembly first:
     echo; echo "  Running minimap/miniasm .."
-    #$myexe1 -Sw5 -L100 -m0 -t8 $reads $reads  | gzip -1 > reads.paf.gz 
-    #$myexe2 -f $reads reads.paf.gz > reads.gfa
-    #awk '$1 ~/S/ {print ">"$2"\n"$3}' reads.gfa > layout_miniasm.fasta
+    $myexe1 -Sw5 -L100 -m0 -t8 $reads $reads  | gzip -1 > reads.paf.gz 
+    $myexe2 -f $reads reads.paf.gz > reads.gfa
+    awk '$1 ~/S/ {print ">"$2"\n"$3}' reads.gfa > layout_miniasm.fasta
 
 
     threads=4
