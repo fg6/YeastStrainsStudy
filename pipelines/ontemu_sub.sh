@@ -7,8 +7,10 @@ thisdir=`pwd`
 wdir=results/pacbio_ontemu_subsample31X
 srcdir=$thisdir/../utils/src
 
+help=$1
 
-if [ $1 == '-h' ]; then
+
+if [[ $help != '' ]]; then
         echo; echo "  Usage:" $(basename $0) 
         echo "  "This script generates an s288c PacBio subsample with same read depth and  
         echo "    "similar read length distribution as s288c ont pass2D sample \(31X\)
@@ -28,8 +30,8 @@ fi
 
 
 
-pbreads=$thisdir/../fastqs/pacbio/$strain/s288c_pacbio.fastq
-ontreads=$thisdir/../fastqs/ont/$strain/s288c_pass2D.fastq
+pbreads=$thisdir/../fastqs/pacbio/s288c/s288c_pacbio.fastq
+ontreads=$thisdir/../fastqs/ont/s288c/s288c_pass2D.fastq
 
 mkdir -p $wdir
 cd $wdir

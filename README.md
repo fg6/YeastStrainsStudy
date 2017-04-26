@@ -93,7 +93,7 @@ After cleaning all except files for Nanopolish (nanoclean): ~700GB
 A python version >= 2.7 is needed. Please 
 make sure this is available in your PATH, 
 together with virtualenv.
-
+C++11 required.
 
 
 ### Pipelines

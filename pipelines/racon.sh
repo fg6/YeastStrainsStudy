@@ -121,7 +121,7 @@ else
     cd $wdir/$outdir
   
     echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-    echo  "  Assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
+    #echo  "  Assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
 
     # miniasm assembly first:
     echo; echo "  Running minimap/miniasm .."
@@ -140,8 +140,8 @@ else
     sam=results/temp/consensus-iter1.sam
     consensus=results/consensus-iter1.fasta
 
-    $myexe3/tools/graphmap/bin/Linux-x64/graphmap align -a anchor --rebuild-index -B 0 -r ${contigs} -d ${reads} -o ${sam} --extcigar -t ${threads}  &> $outfile
-    $myexe3/bin/racon -M 5 -X -4 -G -8 -E -6 --bq 10 -t ${threads} ${contigs} ${sam} ${consensus}  &>> $outfile
+    $myexe3/tools/graphmap/bin/Linux-x64/graphmap align -a anchor --rebuild-index -B 0 -r ${contigs} -d ${reads} -o ${sam} --extcigar -t ${threads}  #&> $outfile
+    $myexe3/bin/racon -M 5 -X -4 -G -8 -E -6 --bq 10 -t ${threads} ${contigs} ${sam} ${consensus}  #&>> $outfile
 
 
     ##### Racon: second iteration
@@ -150,8 +150,12 @@ else
     sam=results/temp/consensus-iter2.sam
     consensus=results/consensus-iter2.fasta
 
-    $myexe3/tools/graphmap/bin/Linux-x64/graphmap align -a anchor --rebuild-index -B 0 -r ${contigs} -d ${reads} -o ${sam} --extcigar -t ${threads}  &>> $outfile
-    $myexe3/bin/racon -M 5 -X -4 -G -8 -E -6 --bq 10 -t ${threads} ${contigs} ${sam} ${consensus} &>> $outfile
+    $myexe3/tools/graphmap/bin/Linux-x64/graphmap align -a anchor --rebuild-index -B 0 -r ${contigs} -d ${reads} -o ${sam} --extcigar -t ${threads}  #&>> $outfile
+    $myexe3/bin/racon -M 5 -X -4 -G -8 -E -6 --bq 10 -t ${threads} ${contigs} ${sam} ${consensus} #&>> $outfile
+     
+
+    echo  "  If no erros, assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
+
 
 fi
 

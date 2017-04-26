@@ -103,7 +103,10 @@ else
     	mkdir -p $wdir
 	cd $wdir
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-	echo "  Assembly will be in $wdir/$outdir/$strain.contigs.fasta "
+#	echo "  Assembly will be in $wdir/$outdir/$strain.contigs.fasta "
 	$command &> $outfile
+
+        echo "  If no errors, assembly will be in $wdir/$outdir/$strain.contigs.fasta "
+
 fi
 

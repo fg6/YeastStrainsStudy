@@ -116,5 +116,8 @@ else
     $myexe2 -f $reads reads.paf.gz > reads.gfa   #&>> $outfile
     cat reads.gfa | egrep "^S" | awk '{print ">" $2"\n"$3}' > assembly.fa
 
+
+    echo  "  If no errors, assembly will be in" $wdir/$outdir/assembly.fa; echo
+
 fi
 

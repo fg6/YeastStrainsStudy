@@ -38,8 +38,9 @@ if [ ! -d  $thisdir/../utils/src/smis ] ; then
     cd smis
     ./makeall.sh 1> /dev/null
 fi
+myexe=$thisdir/../utils/src/smis
 
-inputfa=$thisdir/results/spades/$strain\_miseq/contigs.fasta
+inputfa=$thisdir/results/spades/$strain/contigs.fasta
 
 if [ $platform == 'ont' ]; then
         reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
@@ -85,11 +86,13 @@ else
         mkdir -p $wdir/$outdir
 
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-	echo  "  Assembly will be in " $wdir/$outdir/spinner_scaffolds.fasta 
+#	echo  "  Assembly will be in " $wdir/$outdir/spinner_scaffolds.fasta 
 	
 
 	$myexe/setup.sh $thisdir/$wdir/$outdir/ $inputfa $reads > /dev/null
 	cd $thisdir/$wdir/$outdir/
 	./mysmissv.sh  &> $outfile
+	echo  "  If no errors, assembly will be in " $wdir/$outdir/spinner_scaffolds.fasta 
+
 fi
 
