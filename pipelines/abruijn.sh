@@ -31,7 +31,7 @@ fi
 
 thisdir=`pwd`
 if [ $platform == 'ont' ]; then
-        reads=$thisdir/../fastqs/ont/$strain/$strain/$strain\_pass2D.fastq
+        reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
         if [ ! -z ${cov-x} ] && [ $cov == 'allX' ]; then
                 echo 'allX option valid for pacbio s288c only!'
                 exit 1
@@ -57,10 +57,10 @@ else
                         echo '31X option valid for pacbio s288c only!'
                         exit 1
                 elif [ $cov == '31X' ] && [ $strain == 's288c' ]; then
-                        reads=$thisdir/../fastqs/pacbio/$strain/$strain/s288c_pacbio_ontemu_31X.fastq
+                        reads=$thisdir/../fastqs/pacbio/$strain/s288c_pacbio_ontemu_31X.fastq
                         outdir=$outdir\_31X_ONTemu
                 else
-                        reads=$thisdir/../fastqs/pacbio/$strain/$strain/$strain\_pacbio.fastq
+                        reads=$thisdir/../fastqs/pacbio/$strain/$strain\_pacbio.fastq
                 fi
         else
                 if [ $strain == 's288c' ]; then
@@ -69,7 +69,7 @@ else
                         echo "   cov: only for pacbio s288c: choose coverage sample '31X' or 'allX' "
                         exit 1
                 else
-                        reads=$thisdir/../fastqs/pacbio/$strain/$strain/$strain\_pacbio.fastq
+                        reads=$thisdir/../fastqs/pacbio/$strain/$strain\_pacbio.fastq
                 fi
 
         fi

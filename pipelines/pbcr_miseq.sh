@@ -19,8 +19,8 @@ outfile=$assembler\_$strain\_$platform.output
 thisdir=`pwd`
 
 
-miseq1=$thisdir/../fastqs/miseq/$strain/$strain\_1.fastq
-miseq2=$thisdir/../fastqs/miseq/$strain/$strain\_2.fastq
+miseq1=$thisdir/../fastqs/miseq/$strain\_1.fastq
+miseq2=$thisdir/../fastqs/miseq/$strain\_2.fastq
 
 if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
 	echo; echo "  Usage:" $(basename $0) \<$assembler\> \<strain\> \<platform\>  \<cov\>

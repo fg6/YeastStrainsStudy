@@ -31,8 +31,8 @@ if [ $# -lt 3 ]  || [ $1 == '-h' ]; then
         exit 1
 fi
 
-read1=$thisdir/../fastqs/miseq/$strain/$strain\_1.fastq
-read2=$thisdir/../fastqs/miseq/$strain/$strain\_2.fastq
+read1=$thisdir/../fastqs/miseq/$strain\_1.fastq
+read2=$thisdir/../fastqs/miseq/$strain\_2.fastq
 
 if [ $platform == 'ont' ]; then
 	reads=$thisdir/../fastqs/ont/$strain/$strain\_pass2D.fastq
