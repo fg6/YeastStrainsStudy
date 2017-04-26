@@ -19,6 +19,8 @@ if [ $# -lt 1 ]  || [ $1 == '-h' ]; then
 fi
 
 
+export REF_PATH=http:://www.ebi.ac.uk::80/ena/cram/md5/%s:$REF_PATH 
+
 if [[ ${singlestrain} == "" ]]; then
 	singlestrain=s288c
 fi
