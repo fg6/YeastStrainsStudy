@@ -48,7 +48,8 @@ if [ $platform == 'ont' ]; then
         fi              
 	
 	if [ $strain != 's288c' ]; then
-		echo; echo '  Warning!! Probably read depth not enough for denovo assembly with' $assembler for $strain ' ONT data'
+                echo; echo '  Error!! Not enough read depth for denovo assembly using only long reads with' $assembler for $strain ' ONT data'          
+                exit
 	fi
 
 else

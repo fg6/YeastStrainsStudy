@@ -42,7 +42,8 @@ if [ $platform == 'ont' ]; then
 
 	configfile=$thisdir/configfiles/pbcr_miseq_sens.spec
 	if [ $strain != 's288c' ]; then
-		echo; echo '  Warning!! Probably read depth not enough for denovo assembly with' $assembler for $strain ' ONT data'
+                echo; echo '  Error!! Not enough read depth for denovo assembly using only long reads with' $assembler for $strain ' ONT data'          
+                exit
 	fi
 else
 
@@ -106,11 +107,14 @@ else
 	myfastqToCA=${myexe%/*}/fastqToCA
 
 
-	echo $myfastqToCA
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-	echo "  Assembly will be in $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta"
+#	echo "  Assembly will be in $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta"
 	$myfastqToCA -libraryname illumina -technology illumina -type sanger -innie -insertsize 390 80 -mates $miseq1,$miseq2 > illumina.frg  #&> $outfile
 	$myexe  -length 500 -partitions 200 -l $strain -s $(basename $configfile) -fastq $reads  genomeSize=12160000 illumina.frg  #&>> $outfile
+
+
+        echo; echo "  If no errors assembly will be in $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta"; echo
+
 
 fi
 
