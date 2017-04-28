@@ -81,14 +81,14 @@ else
 	cd $wdir/$outdir
 
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-#	echo  "  Assembly will be in " $wdir/$outdir/npScarf.fin.fasta
+
 	
 
 	$myexe/jsa.seq.sort -r -n --input $inputfa --output sort_spades.fasta   &> $outfile
 	$mybwa index sort_spades.fasta  &>> $outfile
 	$mybwa mem -t 10  -x ont2d  -a -Y sort_spades.fasta $reads  | $myexe/jsa.np.gapcloser -b - -seq sort_spades.fasta  --verbose --prefix=npScarf    &>> $outfile
 	
-	echo  "  If no errors, assembly will be in " $wdir/$outdir/npScarf.fin.fasta
+	echo; echo  "  If no errors, assembly will be in " $wdir/$outdir/npScarf.fin.fasta; echo
 
 fi
 

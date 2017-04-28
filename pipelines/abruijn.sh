@@ -110,8 +110,10 @@ else
 	command=`echo $myexe  $readsfa $outdir  31`
 
 	echo; echo  "  Running:" $assembler on  $(basename $readsfa) in folder $outdir ; echo 
-	echo "  Assembly will be in $wdir/$outdir/polished_2.fasta"
+
 
 	$command  &> $outfile
+
+	echo; echo "  If no errors, assembly will be in" $wdir/$outdir/polished_2.fasta; echo
 fi
 

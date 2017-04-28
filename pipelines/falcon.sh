@@ -109,10 +109,11 @@ else
 	echo `pwd`/$readsfa > input.fofn
 
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-	echo "  Assembly will be in $wdir/$outdir/2-asm-falcon/p_ctg.fa "
+
 
 	source $myexe/fc_env/bin/activate
 	fc_run.py fc_run.cfg  #&> $outfile
 
+	echo; echo "  If no errors, assembly will be in" $wdir/$outdir/2-asm-falcon/p_ctg.fa; echo
 fi
 

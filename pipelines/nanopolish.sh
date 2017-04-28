@@ -85,7 +85,7 @@ else
 	ch3="s#NANOP#$mynanopolish#g"
 
 	
-	echo "  Assembly will be in $wdir/nanopolished.fa "
+
 	sed -e $ch1 $thisdir/configfiles/nanopolish.template.sh | \
 	    sed -e $ch2 | sed -e $ch3 > runnanopolish.sh
 	
@@ -96,6 +96,6 @@ else
 	echo "  "But Warning!! 
 	echo "  "nanopolish requires days of running, 
 	echo "  "please consider running the script $wdir/runnanopolish.sh on a farm !
-       
+	echo; echo "  If no errors, assembly will be in" $wdir/nanopolished.fa ; echo       
 fi
 

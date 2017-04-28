@@ -106,17 +106,14 @@ else
         $srcdir/fq2fa/fq2fa $reads
     fi
 
-    #command1=`echo $myexe -c 1 $readsfa `
-    #command2=`echo make -f yeast.mak`
-
     echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-#    echo  "  Assembly will be in " $wdir/$outdir/wtasm.dmo.cns
+
     $myexe -c 1 $readsfa> yeast.mak
     make -f yeast.mak
-    #$command1  > yeast.mak
-    #$command2 # &> $outfile
 
-    echo  "  If no errors, assembly will be in " $wdir/$outdir/wtasm.dmo.cns
+
+
+    echo; echo  "  If no errors, assembly will be in " $wdir/$outdir/wtasm.dmo.cns; echo
 fi
 
 

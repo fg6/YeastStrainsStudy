@@ -122,7 +122,7 @@ else
     cd $wdir/$outdir
   
     echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-    #echo  "  Assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
+
 
     # miniasm assembly first:
     echo; echo "  Running minimap/miniasm .."
@@ -155,7 +155,7 @@ else
     $myexe3/bin/racon -M 5 -X -4 -G -8 -E -6 --bq 10 -t ${threads} ${contigs} ${sam} ${consensus} #&>> $outfile
      
 
-    echo  "  If no erros, assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
+    echo; echo  "  If no erros, assembly will be in" $wdir/$outdir/results/consensus-iter2.fasta; echo
 
 
 fi

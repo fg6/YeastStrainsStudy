@@ -101,9 +101,10 @@ else
 	cp $configfile .
        
 	echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-	echo "  Assembly will be in $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta"
+
 	$myexe -length 500 -partitions 200 -l $strain -s $(basename $configfile) -fastq $reads  genomeSize=12160000  #&> $outfile
 
+        echo; echo "  If no errors, assembly will be in " $wdir/$outdir/$strain/9-terminator/asm.ctg.fasta; echo
 	
 
 fi

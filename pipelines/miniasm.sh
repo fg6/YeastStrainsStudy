@@ -112,13 +112,13 @@ else
     cd $wdir/$outdir
   
     echo; echo  "  Running:" $assembler on  $(basename $reads) in folder $wdir/$outdir ; echo 
-    echo  "  Assembly will be in" $wdir/$outdir/assembly.fa; echo
+
     $myexe1 -Sw5 -L100 -m0 -t8 $reads $reads  | gzip -1 > reads.paf.gz   #&> $outfile
     $myexe2 -f $reads reads.paf.gz > reads.gfa   #&>> $outfile
     cat reads.gfa | egrep "^S" | awk '{print ">" $2"\n"$3}' > assembly.fa
 
 
-    echo  "  If no errors, assembly will be in" $wdir/$outdir/assembly.fa; echo
+    echo; echo  "  If no errors, assembly will be in" $wdir/$outdir/assembly.fa; echo
 
 fi
 
