@@ -1,5 +1,5 @@
 # YeastStrainsStudy
-Scripts to download the PacBio, ONT and MiSeq datasets used in [reference-paper]
+Scripts to download the PacBio, ONT and MiSeq datasets used in https://www.nature.com/articles/s41598-017-03996-z
 and run the pipelines as described in the paper or simply download the final assemblies as generated
 by the authors.
 
